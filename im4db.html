@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TUM IM4DB Exam Trainer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2333;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#0065BD;--accent2:#1a8cff;--green:#2ea043;--red:#f85149;--orange:#d29922;--purple:#a371f7}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(135deg,#0a0e14,#0d1117);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+header .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.logo{font-size:1.4rem;font-weight:700;color:var(--accent2)}
+.logo span{color:var(--text2);font-weight:400;font-size:.85rem;margin-left:8px}
+nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+nav button{background:var(--card);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.85rem;transition:.2s}
+nav button:hover,nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+nav a.nav-link{background:var(--card2);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:6px;font-size:.85rem;transition:.2s}
+nav a.nav-link:hover{border-color:var(--accent);color:var(--text)}
+.dashboard{padding:30px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:30px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center}
+.stat-card .num{font-size:2rem;font-weight:700;color:var(--accent2)}
+.stat-card .label{color:var(--text2);font-size:.85rem;margin-top:4px}
+.topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.topic-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.topic-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.topic-card .topic-num{position:absolute;top:12px;right:12px;font-size:.7rem;padding:3px 8px;border-radius:4px;font-weight:600;background:#0065BD33;color:var(--accent2)}
+.topic-card h3{font-size:1.05rem;margin-bottom:6px;padding-right:60px}
+.topic-card .desc{color:var(--text2);font-size:.8rem;margin-bottom:12px}
+.topic-card .progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.topic-card .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:.3s}
+.topic-card .meta{display:flex;justify-content:space-between;margin-top:8px;font-size:.76rem;color:var(--text2)}
+.topic-card .meta .got-it{color:var(--green)}
+.topic-card .meta .missed{color:var(--red)}
+.section{padding:30px 0;display:none}
+.section.active{display:block}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.section-header h2{font-size:1.5rem}
+.back-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.85rem}
+.back-btn:hover{border-color:var(--accent)}
+/* Theory cheat sheet */
+.theory-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:24px}
+.theory-box h3{color:var(--accent2);margin-bottom:12px;font-size:1.05rem}
+.theory-box ul{padding-left:20px}
+.theory-box li{margin-bottom:5px;color:var(--text2);font-size:.88rem}
+.theory-box li strong{color:var(--text)}
+.theory-box .tag{display:inline-block;background:#0065BD22;color:var(--accent2);padding:1px 7px;border-radius:4px;font-size:.75rem;margin-right:4px}
+.collapsible-theory{margin-bottom:16px}
+.collapsible-theory summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.9rem;font-weight:600;color:var(--accent2);user-select:none;transition:.2s}
+.collapsible-theory summary:hover{border-color:var(--accent)}
+.collapsible-theory[open] summary{border-radius:8px 8px 0 0;border-bottom-color:transparent}
+.collapsible-theory .theory-inner{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:16px 18px}
+.caret{transition:.2s}
+details[open] .caret{transform:rotate(90deg)}
+/* Flashcard */
+.flashcard-controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.flashcard-controls select,.flashcard-controls button{background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.85rem;transition:.2s}
+.flashcard-controls button:hover,.flashcard-controls button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.flashcard-progress{color:var(--text2);font-size:.85rem;margin-left:auto}
+.flashcard-wrap{perspective:1200px;margin-bottom:24px}
+.flashcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:40px 36px;min-height:220px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:border-color .2s;position:relative}
+.flashcard .fc-topic-label{position:absolute;top:14px;left:18px;font-size:.72rem;color:var(--text2);background:var(--card2);padding:2px 9px;border-radius:4px}
+.flashcard .fc-counter{position:absolute;top:14px;right:18px;font-size:.72rem;color:var(--text2)}
+.flashcard .fc-question{font-size:1.2rem;font-weight:600;line-height:1.5;color:var(--text);max-width:700px}
+.flashcard .fc-hint{font-size:.8rem;color:var(--text2);margin-top:16px}
+.flashcard .fc-answer{margin-top:20px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px 20px;font-size:1rem;line-height:1.7;color:var(--text);text-align:left;width:100%;max-width:700px;display:none}
+.flashcard .fc-answer.visible{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.flashcard .fc-answer strong{color:var(--accent2)}
+.reveal-btn{background:var(--accent);color:#fff;border:none;padding:11px 28px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:20px;transition:.15s}
+.reveal-btn:hover{background:var(--accent2)}
+.reveal-btn:disabled{background:var(--card2);color:var(--text2);cursor:default}
+.rating-bar{display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.rate-btn{padding:10px 24px;border-radius:8px;border:none;font-size:.9rem;font-weight:600;cursor:pointer;transition:.15s;min-width:110px}
+.rate-btn.got-it{background:#2ea04322;color:var(--green);border:1px solid var(--green)}
+.rate-btn.got-it:hover{background:var(--green);color:#fff}
+.rate-btn.partial{background:#d2992222;color:var(--orange);border:1px solid var(--orange)}
+.rate-btn.partial:hover{background:var(--orange);color:#fff}
+.rate-btn.missed{background:#f8514922;color:var(--red);border:1px solid var(--red)}
+.rate-btn.missed:hover{background:var(--red);color:#fff}
+.fc-nav-row{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.fc-nav-row button{background:var(--card);border:1px solid var(--border);color:var(--text2);padding:7px 18px;border-radius:6px;cursor:pointer;font-size:.85rem;transition:.2s}
+.fc-nav-row button:hover{border-color:var(--accent);color:var(--text)}
+.fc-done-banner{background:var(--card);border:1px solid var(--green);border-radius:12px;padding:36px;text-align:center;margin:20px 0}
+.fc-done-banner h3{color:var(--green);font-size:1.4rem;margin-bottom:10px}
+.fc-done-banner p{color:var(--text2);margin-bottom:20px}
+.fc-done-banner .score-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.fc-done-banner .score-item{background:var(--bg);border-radius:8px;padding:14px 20px;text-align:center}
+.fc-done-banner .score-item .snum{font-size:1.6rem;font-weight:700}
+.fc-done-banner .score-item.g .snum{color:var(--green)}
+.fc-done-banner .score-item.p .snum{color:var(--orange)}
+.fc-done-banner .score-item.m .snum{color:var(--red)}
+.fc-done-banner .score-item .slabel{font-size:.78rem;color:var(--text2);margin-top:2px}
+/* Exam simulation */
+.exam-setup{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:36px;max-width:580px;margin:40px auto;text-align:center}
+.exam-setup h2{margin-bottom:12px}
+.exam-setup p{color:var(--text2);margin-bottom:24px;font-size:.95rem}
+.exam-setup button{background:var(--accent);color:#fff;border:none;padding:13px 36px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;transition:.15s}
+.exam-setup button:hover{background:var(--accent2)}
+.exam-running-header{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 22px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:68px;z-index:50}
+.timer{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
+.timer.warning{color:var(--orange)}
+.timer.danger{color:var(--red)}
+.exam-q-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:20px}
+.exam-q-card .eq-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:6px}
+.exam-q-card .eq-num{font-size:.8rem;color:var(--text2);font-weight:600}
+.exam-q-card .eq-topic{font-size:.75rem;background:#0065BD22;color:var(--accent2);padding:2px 9px;border-radius:4px}
+.exam-q-card .eq-question{font-size:1.05rem;line-height:1.6;margin-bottom:18px}
+.exam-q-card textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:12px;font-size:.9rem;font-family:inherit;resize:vertical;min-height:100px;line-height:1.6;transition:.15s}
+.exam-q-card textarea:focus{outline:none;border-color:var(--accent)}
+.exam-q-card .eq-reveal-btn{background:transparent;border:1px solid var(--border);color:var(--text2);padding:7px 16px;border-radius:6px;cursor:pointer;font-size:.82rem;margin-top:10px;transition:.2s}
+.exam-q-card .eq-reveal-btn:hover{border-color:var(--accent2);color:var(--text)}
+.exam-q-card .eq-answer-box{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:14px;margin-top:12px;font-size:.88rem;display:none;line-height:1.7}
+.exam-q-card .eq-answer-box.visible{display:block;animation:fadeIn .2s ease}
+.exam-q-card .eq-self-rate{display:none;margin-top:12px}
+.exam-q-card .eq-self-rate.visible{display:flex;gap:8px;flex-wrap:wrap}
+.eq-rate-btn{padding:7px 18px;border-radius:6px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s}
+.eq-rate-btn.got-it{background:#2ea04322;color:var(--green);border:1px solid var(--green)}
+.eq-rate-btn.got-it:hover,.eq-rate-btn.got-it.selected{background:var(--green);color:#fff}
+.eq-rate-btn.partial{background:#d2992222;color:var(--orange);border:1px solid var(--orange)}
+.eq-rate-btn.partial:hover,.eq-rate-btn.partial.selected{background:var(--orange);color:#fff}
+.eq-rate-btn.missed{background:#f8514922;color:var(--red);border:1px solid var(--red)}
+.eq-rate-btn.missed:hover,.eq-rate-btn.missed.selected{background:var(--red);color:#fff}
+.exam-footer{display:flex;justify-content:center;gap:12px;margin-top:24px;flex-wrap:wrap}
+.exam-footer button{padding:12px 30px;border-radius:8px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;transition:.15s}
+.exam-footer .submit-exam-btn{background:var(--accent);color:#fff}
+.exam-footer .submit-exam-btn:hover{background:var(--accent2)}
+.results-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+.results-content{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:36px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto}
+.results-content h2{text-align:center;margin-bottom:6px}
+.results-content .results-sub{text-align:center;color:var(--text2);font-size:.88rem;margin-bottom:20px}
+.score-circle{width:120px;height:120px;border-radius:50%;border:4px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;flex-direction:column}
+.score-circle .sc-num{font-size:2rem;font-weight:700;color:var(--accent2)}
+.score-circle .sc-label{font-size:.7rem;color:var(--text2)}
+.results-breakdown{margin-top:16px}
+.results-breakdown .rb-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.results-breakdown .rb-row:last-child{border-bottom:none}
+.results-breakdown .rb-val.g{color:var(--green)}
+.results-breakdown .rb-val.o{color:var(--orange)}
+.results-breakdown .rb-val.r{color:var(--red)}
+.results-content .results-btns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.results-content .results-btns button{padding:10px 24px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text);cursor:pointer;font-size:.88rem;transition:.15s}
+.results-content .results-btns button:hover{border-color:var(--accent);color:var(--accent2)}
+.results-content .results-btns button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.hidden{display:none!important}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .topics-grid{grid-template-columns:1fr}
+  header .container{flex-direction:column;align-items:flex-start}
+  nav{width:100%;overflow-x:auto}
+  .flashcard{padding:28px 20px}
+  .rating-bar{gap:8px}
+  .rate-btn{min-width:90px;padding:9px 14px;font-size:.82rem}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+  <div class="logo">TUM IM4DB<span>Exam Trainer</span></div>
+  <nav>
+    <button class="active" onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('flashcards')">Flashcards</button>
+    <button onclick="showSection('exam')">Exam Simulation</button>
+    <a class="nav-link" href="index.html">Cost Accounting →</a>
+  </nav>
+</div>
+</header>
+
+<div class="container">
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="section active" style="display:block;padding:30px 0">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">Cards Seen</div></div>
+      <div class="stat-card"><div class="num" id="statGot" style="color:var(--green)">0</div><div class="label">Got It</div></div>
+      <div class="stat-card"><div class="num" id="statPartial" style="color:var(--orange)">0</div><div class="label">Partial</div></div>
+      <div class="stat-card"><div class="num" id="statMissed" style="color:var(--red)">0</div><div class="label">Missed It</div></div>
+      <div class="stat-card"><div class="num" id="statExams">0</div><div class="label">Exams Done</div></div>
+    </div>
+    <h2 style="margin-bottom:16px">12 Topics</h2>
+    <div class="topics-grid" id="topicsGrid"></div>
+  </div>
+
+  <!-- FLASHCARDS SECTION -->
+  <div id="flashcards" class="section" style="display:none">
+    <div class="section-header">
+      <h2 id="fcSectionTitle">Flashcards</h2>
+      <button class="back-btn" onclick="showSection('dashboard')">← Dashboard</button>
+    </div>
+    <div class="flashcard-controls">
+      <select id="fcTopicFilter" onchange="initFlashcards()">
+        <option value="all">All Topics</option>
+      </select>
+      <select id="fcOrderFilter" onchange="initFlashcards()">
+        <option value="seq">Sequential</option>
+        <option value="random">Random</option>
+        <option value="weak">Weakest First</option>
+      </select>
+      <button id="fcRestartBtn" onclick="initFlashcards()">Restart</button>
+      <span class="flashcard-progress" id="fcProgress"></span>
+    </div>
+    <div id="fcArea"></div>
+    <!-- Theory cheat sheet below flashcards -->
+    <div id="theoryArea" style="margin-top:30px"></div>
+  </div>
+
+  <!-- EXAM SECTION -->
+  <div id="exam" class="section" style="display:none">
+    <div id="examSetupArea"></div>
+    <div id="examRunArea" class="hidden"></div>
+  </div>
+</div>
+
+<div id="resultsModal" class="results-modal hidden"></div>
+
+<script>
+// ============================================================
+// DATA: 12 TOPICS + 100+ FLASHCARDS
+// ============================================================
+const TOPICS = [
+  {
+    id:'intro',
+    num:1,
+    name:'Intro to Information Management',
+    desc:'Digital transformation, IM layers, info as asset, McKinsey pitfalls',
+    theory:[
+      '<strong>3 Layers of IM:</strong> Information Economics → Information Systems → ICT',
+      '<strong>Info as asset conditions:</strong> Relative scarcity + Economic demand',
+      '<strong>Info vs material assets:</strong> Low reproduction cost, no depreciation by use, unlimited divisibility, simple logistics, security problems',
+      '<strong>3 McKinsey pitfalls:</strong> Siloed mindsets, lack of common culture, lack of common view of customers',
+      '<strong>4 challenges of digital transformation:</strong> Cybersecurity, privacy, new skills needed, comprehensive strategy',
+      '<strong>Digital transformation is:</strong> Uncertain and iterative (not fast and certain)',
+      '<strong>2 critical dimensions:</strong> Digital capabilities + Leadership capabilities',
+      'IM includes executive tasks (yes)',
+      '<strong>6 model types in IM:</strong> Data, Processes, Architecture, Service, Business, Ecosystem',
+    ]
+  },
+  {
+    id:'bm',
+    num:2,
+    name:'Digital Business Models',
+    desc:'BMC, BM archetypes, IT roles, BM patterns',
+    theory:[
+      '<strong>4 BM elements:</strong> Value proposition, Revenue model, Value chain, Target customer',
+      '<strong>BMC 9 boxes:</strong> Key Partners, Key Activities, Key Resources, Value Props, Customer Relationships, Channels, Customer Segments, Cost Structure, Revenue Streams',
+      '<strong>5 IT-enabled BM archetypes:</strong> New digital businesses, Rethinking value props, Digital distribution, Connecting digital consumers, Reshaping knowledge via big data',
+      '<strong>3 IT roles in BM:</strong> Irrelevant, Enabling, Constitutive',
+      '<strong>Constitutive:</strong> Without IT impossible at scale',
+      '<strong>Peer-to-peer pattern:</strong> Platform for homogeneous individuals',
+      '<strong>Add-on pattern:</strong> Core product at base price, extras sold separately',
+      '<strong>Juicero:</strong> Recurring sale of juice packages (razor+blades)',
+      'Digitalization can be of ANY product/service, not just own',
+      '<strong>6 model types:</strong> Data, Processes, Architecture, Service, Business, Ecosystem',
+    ]
+  },
+  {
+    id:'strategy',
+    num:3,
+    name:'IT Strategy & Innovation',
+    desc:'Strategic alignment, Porter\'s 5 forces, network effects, disintermediation',
+    theory:[
+      '<strong>2 alignment perspectives:</strong> Strategic fit + Functional integration',
+      '<strong>Porter\'s 5 forces:</strong> Rivalry, Supplier power, Buyer power, New entrants, Substitutes',
+      '<strong>4 strategy levels:</strong> Corporation, Division, Functional, Operational',
+      '<strong>Innovation (Brockhoff):</strong> Invention requiring investment for production/marketing that proves successful',
+      '<strong>Strategic grid "Support":</strong> NOT critical for daily business',
+      '<strong>Network effects ≠ production effects:</strong> Network = value grows with users; Production = economies of scale',
+      '<strong>Chicken-and-egg problem:</strong> Two-sided markets need both sides simultaneously',
+      '<strong>Disintermediation advantages:</strong> Margin potential + Customer data/feedback',
+      '<strong>Airbnb/Netflix strategies:</strong> Disintermediation + Platform strategy',
+      '<strong>Kodak:</strong> Example of failing to create new digital business',
+    ]
+  },
+  {
+    id:'demand',
+    num:4,
+    name:'Information Demand',
+    desc:'Objective vs subjective need, BSC, CSF, info user categories',
+    theory:[
+      '<strong>Objective need:</strong> Info actually needed for decision',
+      '<strong>Subjective need:</strong> What decision-makers THINK they need',
+      '<strong>Wilson\'s 3 needs:</strong> Physiological, Affective, Cognitive',
+      '<strong>3 categories for assessing info demand:</strong> Objective, Subjective, Mixed methods',
+      '<strong>S.M.A.R.T.:</strong> Specific, Measurable, Assignable, Realistic, Time-related',
+      '<strong>BSC 4 perspectives:</strong> Financial, Customer, Internal Process, Learning & Growth',
+      '<strong>BSC Learning & Growth:</strong> Sustain ability to change and improve',
+      '<strong>Info status criteria:</strong> (1) Objectively needed (2) Can be supplied',
+      '<strong>Human info processing:</strong> ~0.1 GB/sec (Spitzer)',
+      '<strong>4 info user categories:</strong> Potential, Supposed, Actual, Users',
+      '<strong>CSF:</strong> Critical Success Factors — key areas ensuring success',
+    ]
+  },
+  {
+    id:'supply',
+    num:5,
+    name:'Information Supply',
+    desc:'Metadata, portals, data quality, info value types, data warehouse',
+    theory:[
+      '<strong>2 managerial tasks for info sources:</strong> Selection/evaluation + Quality assurance',
+      '<strong>Structural metadata:</strong> How compound objects are assembled (pages→chapters)',
+      '<strong>2 basic metadata types:</strong> Formal + Content-related',
+      '<strong>Socrates\' 3 filters:</strong> Truth, Goodness, Usefulness',
+      '<strong>Google News click = :</strong> Implicit user modeling',
+      '<strong>2 portal classes by topic:</strong> Horizontal + Vertical',
+      '<strong>4 data quality perspectives:</strong> Intrinsic, Contextual, Representational, Accessibility',
+      '<strong>3 info value types:</strong> Normative, Realistic, Subjective',
+      '<strong>Data warehouse:</strong> Standardized, structured, integrated repository for analysis',
+      '<strong>External security researchers:</strong> Different expertise/attacker mindset + many eyes',
+    ]
+  },
+  {
+    id:'aris',
+    num:6,
+    name:'Modeling IS (ARIS)',
+    desc:'ARIS layers, views, EPC, ER modeling, BPMN',
+    theory:[
+      '<strong>3 ARIS description layers:</strong> Requirements, Design specification, Implementation',
+      '<strong>4 ARIS views:</strong> Data, Functions, Control, Organization',
+      '<strong>Organization view:</strong> Human resources and their relationships',
+      '<strong>EPC:</strong> Event-driven Process Chain — time and logic dependencies',
+      '<strong>3 ER model elements:</strong> Entities, Attributes, Relationships',
+      '<strong>XOR:</strong> Exactly one branch (mutually exclusive)',
+      '<strong>EPCs CAN be standardized</strong> (common misconception they cannot)',
+      '<strong>BPMN vs EPC:</strong> BPMN = more precise/flexible but harder to learn',
+      '<strong>Data modeling objective:</strong> Formal description of enterprise data',
+      '<strong>Run-time reduction approaches:</strong> Outsourcing, Parallelization, Integration',
+    ]
+  },
+  {
+    id:'ict',
+    num:7,
+    name:'Innovative ICT',
+    desc:'TAM, UTAUT, Rogers, diffusion, RPA, blockchain, process mining',
+    theory:[
+      '<strong>Digital Twin:</strong> Virtual representation of physical object using real-time data',
+      '<strong>TAM 2 key factors:</strong> Perceived usefulness + Perceived ease of use',
+      '<strong>UTAUT adds to TAM:</strong> Social influence + Facilitating conditions',
+      '<strong>Rogers\' 5 innovation characteristics:</strong> Relative advantage, Compatibility, Complexity, Trialability, Observability',
+      '<strong>5 adopter categories:</strong> Innovators, Early adopters, Early majority, Late majority, Laggards',
+      '<strong>4 elements of diffusion:</strong> Innovation, Channels, Time, Social system',
+      '<strong>RPA interface:</strong> Uses USER interface like humans — not APIs',
+      '<strong>Blockchain:</strong> Decentralized (not centralized)',
+      '<strong>Process mining:</strong> Analyze existing processes from event logs',
+      '<strong>Social system differentiating factor:</strong> Structure (arrangement pattern of units)',
+    ]
+  },
+  {
+    id:'china',
+    num:8,
+    name:'China Digital Business',
+    desc:'Social commerce, FinTech, Guanxi, super apps, community group buying',
+    theory:[
+      '<strong>2 features of social commerce:</strong> Social interaction/sharing + User-generated content',
+      '<strong>FinTech targets:</strong> Rural/underbanked + Small/micro businesses',
+      '<strong>Guanxi:</strong> Personal trust and reciprocal favors (NOT financial obligations)',
+      '<strong>Reverse-manufacturing (Shein):</strong> Produce based on actual demand, not forecasts',
+      '<strong>Super app growth:</strong> Vertical integration, diversification/platform envelopment',
+      '<strong>Community group buying:</strong> Eliminates distribution layers, direct from suppliers',
+      '<strong>30-min OTC drug delivery:</strong> On-demand economy',
+      '<strong>Chinese tech giants:</strong> Create digital ecosystems fostering innovation',
+      '<strong>E-Commerce Law:</strong> Platforms must verify businesses (yes)',
+      '<strong>China digital economy factors:</strong> Large population, mobile-first, weak traditional infrastructure, govt support',
+    ]
+  },
+  {
+    id:'ismgmt',
+    num:9,
+    name:'Management of IS & ICT',
+    desc:'IS definition, ERP, SOA, application portfolio, lifecycle management',
+    theory:[
+      '<strong>IS definition:</strong> Humans and/or machines that create/use info, interconnected via communication',
+      '<strong>3 ICT functionalities:</strong> Storage, Processing, Communication',
+      '<strong>ERP common element:</strong> Integration across the organization',
+      '<strong>ERP disadvantages:</strong> Time-consuming, expensive, vendor dependence, complexity, conformity',
+      '<strong>IS vs App Systems:</strong> IS includes humans; app systems = purely technical',
+      '<strong>ERP benefit from common DBMS:</strong> Information transparency',
+      '<strong>SOA:</strong> Service-Oriented Architecture — reusable components via service interfaces',
+      '<strong>3 pairs of system definitions:</strong> Open/Closed, Dynamic/Static, Simple/Complex',
+      'Management does NOT evaluate every tech — focus on strategic relevance',
+      '<strong>IS management tasks:</strong> Lifecycle of single app + Application portfolio management',
+    ]
+  },
+  {
+    id:'km',
+    num:10,
+    name:'Knowledge Management',
+    desc:'Explicit vs tacit, DW, OLTP vs OLAP, in-memory, reverse mentoring',
+    theory:[
+      '<strong>KM objective:</strong> Identifying, capturing, evaluating, retrieving, sharing enterprise info assets',
+      '<strong>Explicit knowledge:</strong> Policies, papers, reports',
+      '<strong>Tacit knowledge:</strong> Personalized, subjective, from experiential learning',
+      '<strong>DW 4 characteristics:</strong> Subject-oriented, Integrated, Non-volatile, Time-variant',
+      '<strong>OLTP:</strong> Transactional/operational/high frequency',
+      '<strong>OLAP:</strong> Analytical/strategic/lower frequency',
+      '<strong>OLTP/OLAP convergence:</strong> In-memory computing',
+      '<strong>Drill-down complement:</strong> Roll up',
+      '<strong>KM acquisition:</strong> Internal (training) + External (consulting, hiring)',
+      '<strong>Reverse mentoring:</strong> Young mentors old on technology',
+      '<strong>KM barrier:</strong> Corporate culture',
+      '<strong>Long-term KM motivation:</strong> Intrinsic',
+    ]
+  },
+  {
+    id:'security',
+    num:11,
+    name:'Security & Privacy',
+    desc:'GDPR rights, ISMS, Courtney\'s laws, data types, security standards',
+    theory:[
+      '<strong>3 benefits of security standards:</strong> Best practice, Common framework, Third-party trust',
+      '<strong>Courtney\'s 2nd law:</strong> Never spend more on security than cost of tolerating exposure',
+      '<strong>Corollary 1:</strong> Perfect security = infinite cost',
+      '<strong>Corollary 2:</strong> No zero risk',
+      '<strong>Courtney\'s 3rd law:</strong> Technical and management problems intertwined',
+      '<strong>Right to Access vs Portability:</strong> Access = know data; Portability = control/transfer',
+      '<strong>GPS data type:</strong> Observed data',
+      '<strong>Least known GDPR right:</strong> Data portability',
+      '<strong>ISO 27001:</strong> Establish, implement, maintain, <em>continually improve</em> (not certify)',
+      '<strong>Technical vs human measures:</strong> Technical deployed MORE often',
+      '<strong>ISMS:</strong> Should align with corporate objectives (yes)',
+    ]
+  },
+  {
+    id:'cio',
+    num:12,
+    name:'Managerial Functions & CIO',
+    desc:'CIO competencies, IT governance, COBIT, outsourcing, IT controlling',
+    theory:[
+      '<strong>CIO 7 competencies:</strong> Market awareness, Leadership, Visionary, Strategic thinking, Relationship building, Diplomatic, Reliable',
+      '<strong>Leadership competency includes:</strong> Empathy, listening, passion',
+      '<strong>IT Governance:</strong> Framework for decision rights and accountabilities for desirable IT behavior',
+      '<strong>COBIT:</strong> Governance and Management of Enterprise IT',
+      '<strong>Outsourcing reason categories:</strong> Strategic, Economic, Technological',
+      '<strong>Outsourcing risk categories:</strong> Strategic, Management, Cost, Technological',
+      '<strong>IT Controlling:</strong> Ensures info processing satisfies economic + performance objectives',
+      '<strong>4 IM org approaches:</strong> Line instance, Main area, Executive dept, Cross-departmental matrix',
+      '<strong>CIO shrinking part:</strong> Operations/running (keeping lights on)',
+      '<strong>Giving up IT know-how risk:</strong> Strategic risk (dependency)',
+      '<strong>Visionary competency includes:</strong> Assessment of current technology trends',
+    ]
+  },
+];
+
+const CARDS = [
+  // TOPIC 1: Intro to IM
+  {t:'intro',q:'What are the 2 critical dimensions of digital transformation?',a:'<strong>1. Digital capabilities</strong> — technology, data, platforms<br><strong>2. Leadership capabilities</strong> — vision, change management, culture'},
+  {t:'intro',q:'Is digital transformation fast and certain?',a:'<strong>No.</strong> It is <strong>uncertain and iterative</strong> — organizations must experiment, learn, and adapt continuously.'},
+  {t:'intro',q:'What are the conditions for information to be considered an asset?',a:'<strong>1. Relative scarcity</strong> — not freely and universally available<br><strong>2. Economic demand</strong> — someone is willing to pay for it'},
+  {t:'intro',q:'Name the 3 layers of Information Management (IM).',a:'<strong>1. Information Economics</strong> — economic perspective on info<br><strong>2. Information Systems</strong> — organizational systems<br><strong>3. ICT</strong> — technical infrastructure'},
+  {t:'intro',q:'How does information differ from material assets? Name 5 characteristics.',a:'<strong>1.</strong> Low reproduction cost<br><strong>2.</strong> No depreciation by use<br><strong>3.</strong> Unlimited divisibility<br><strong>4.</strong> Simple logistics (digital transmission)<br><strong>5.</strong> Security problems (easy to copy/steal)'},
+  {t:'intro',q:'What are the 3 McKinsey pitfalls in digital transformation?',a:'<strong>1.</strong> Siloed mindsets<br><strong>2.</strong> Lack of common culture<br><strong>3.</strong> Lack of common view of customers'},
+  {t:'intro',q:'Does IM include executive tasks?',a:'<strong>Yes.</strong> IM spans from technical ICT management up to executive-level strategy and decision-making.'},
+  {t:'intro',q:'Name 4 challenges of digital transformation.',a:'<strong>1.</strong> Cybersecurity<br><strong>2.</strong> Privacy<br><strong>3.</strong> New skills needed<br><strong>4.</strong> Need for a comprehensive strategy'},
+  {t:'intro',q:'What are the 6 types of models used in Information Management?',a:'<strong>1.</strong> Data models<br><strong>2.</strong> Process models<br><strong>3.</strong> Architecture models<br><strong>4.</strong> Service models<br><strong>5.</strong> Business models<br><strong>6.</strong> Ecosystem models'},
+
+  // TOPIC 2: Digital Business Models
+  {t:'bm',q:'What are the 4 core elements of a business model?',a:'<strong>1. Value Proposition</strong> — what problem do we solve?<br><strong>2. Revenue Model</strong> — how do we earn money?<br><strong>3. Value Chain</strong> — how do we create value?<br><strong>4. Target Customer</strong> — for whom?'},
+  {t:'bm',q:'List all 9 boxes of the Business Model Canvas.',a:'<strong>1.</strong> Key Partners<br><strong>2.</strong> Key Activities<br><strong>3.</strong> Key Resources<br><strong>4.</strong> Value Propositions<br><strong>5.</strong> Customer Relationships<br><strong>6.</strong> Channels<br><strong>7.</strong> Customer Segments<br><strong>8.</strong> Cost Structure<br><strong>9.</strong> Revenue Streams'},
+  {t:'bm',q:'What are the 5 archetypes of IT-enabled business model innovation?',a:'<strong>1.</strong> Creating new digital businesses<br><strong>2.</strong> Rethinking value propositions<br><strong>3.</strong> Digital distribution channels<br><strong>4.</strong> Connecting digital consumers<br><strong>5.</strong> Reshaping knowledge via big data'},
+  {t:'bm',q:'What are the 3 roles of IT in business model patterns?',a:'<strong>1. Irrelevant</strong> — IT plays no special role<br><strong>2. Enabling</strong> — IT supports the business model<br><strong>3. Constitutive</strong> — Without IT the business model is impossible at scale'},
+  {t:'bm',q:'Does digitalization mean creating a digital version of your OWN product only?',a:'<strong>No.</strong> Digitalization can apply to any product or service — your own or others\'. The scope is broader than just own offerings.'},
+  {t:'bm',q:'Which BM pattern applies to a platform serving homogeneous individuals (e.g. peer lending)?',a:'The <strong>Peer-to-Peer pattern</strong> — connects individuals with similar needs/roles without intermediaries.'},
+  {t:'bm',q:'A car manufacturer sells standard features separately as upgrades. Which BM pattern?',a:'The <strong>Add-on pattern</strong> — base product at low/entry price, extras priced individually. Examples: car options, budget airlines.'},
+  {t:'bm',q:'A business model is only viable without IT. Which role does IT play?',a:'<strong>Irrelevant</strong> — IT has no constitutive or enabling role in this model.'},
+  {t:'bm',q:'What was Juicero\'s revenue model?',a:'<strong>Recurring sale of juice packages</strong> — the machine (razor) was cheap, revenue came from proprietary juice packets (blades). A razor-and-blades model.'},
+
+  // TOPIC 3: IT Strategy & Innovation
+  {t:'strategy',q:'Name the 2 alignment perspectives in strategic IT alignment.',a:'<strong>1. Strategic fit</strong> — aligning IT strategy with business strategy<br><strong>2. Functional integration</strong> — aligning IT infrastructure with organizational infrastructure'},
+  {t:'strategy',q:'Name Porter\'s 5 competitive forces.',a:'<strong>1.</strong> Competitive rivalry (existing competitors)<br><strong>2.</strong> Supplier power<br><strong>3.</strong> Buyer power<br><strong>4.</strong> Threat of new entrants<br><strong>5.</strong> Threat of substitutes'},
+  {t:'strategy',q:'The Kodak case illustrates which BM innovation archetype — and what failure?',a:'It illustrates <strong>"Creating new digital businesses"</strong> — Kodak invented digital photography but <strong>failed to cannibalize its own film business</strong> and was overtaken.'},
+  {t:'strategy',q:'What strategies are associated with Airbnb and Netflix?',a:'<strong>Disintermediation</strong> (cutting out traditional middlemen like hotels/video stores) + <strong>Platform strategy</strong> (connecting supply and demand directly)'},
+  {t:'strategy',q:'Are network effects the same as production economies of scale?',a:'<strong>No.</strong> Network effects = value of a product/service increases as MORE users join (demand side). Production economies of scale = cost per unit decreases with volume (supply side).'},
+  {t:'strategy',q:'Name the 4 levels of strategy in a company.',a:'<strong>1.</strong> Corporate level (overall direction)<br><strong>2.</strong> Division/SBU level<br><strong>3.</strong> Functional level (IT, marketing, HR)<br><strong>4.</strong> Operational level'},
+  {t:'strategy',q:'Give the Brockhoff definition of innovation.',a:'An <strong>invention</strong> that requires investment for production or marketing and that <strong>proves successful</strong> in the market — not just any new idea.'},
+  {t:'strategy',q:'In McFarlan\'s Strategic Grid, what does a "Support" application mean? Is it critical for daily operations?',a:'A "Support" application has <strong>low strategic impact AND low operational criticality</strong>. It is <strong>NOT critical</strong> for daily business.'},
+  {t:'strategy',q:'What is the chicken-and-egg problem in digital platforms?',a:'In <strong>two-sided markets</strong>, one side only joins if the other side is already present. A platform needs buyers to attract sellers and sellers to attract buyers — both simultaneously.'},
+  {t:'strategy',q:'Name 2 advantages of disintermediation.',a:'<strong>1. Higher margin potential</strong> — no middleman taking a cut<br><strong>2. Direct customer data and feedback</strong> — closer relationship with end consumer'},
+
+  // TOPIC 4: Information Demand
+  {t:'demand',q:'What is the difference between objective and subjective information need?',a:'<strong>Objective need:</strong> The information actually required to make a correct decision (often determined externally/analytically).<br><strong>Subjective need:</strong> What decision-makers THINK they need — may be incomplete, biased, or wrong.'},
+  {t:'demand',q:'Name Wilson\'s 3 categories of information needs.',a:'<strong>1. Physiological</strong> — basic physical needs<br><strong>2. Affective</strong> — emotional/psychological needs<br><strong>3. Cognitive</strong> — knowledge and understanding needs'},
+  {t:'demand',q:'What are the 3 categories for assessing information demand?',a:'<strong>1. Objective methods</strong> — analysis of decisions, tasks, processes<br><strong>2. Subjective methods</strong> — interviews, surveys of decision-makers<br><strong>3. Mixed methods</strong> — combining both approaches'},
+  {t:'demand',q:'What does S.M.A.R.T. stand for (in goal setting)?',a:'<strong>S</strong>pecific<br><strong>M</strong>easurable<br><strong>A</strong>ssignable (or Achievable)<br><strong>R</strong>ealistic<br><strong>T</strong>ime-related'},
+  {t:'demand',q:'Name the 4 perspectives of the Balanced Scorecard.',a:'<strong>1. Financial</strong><br><strong>2. Customer</strong><br><strong>3. Internal Process</strong><br><strong>4. Learning & Growth</strong>'},
+  {t:'demand',q:'Which BSC perspective addresses the ability to change and improve over time?',a:'The <strong>Learning & Growth</strong> perspective — covers employee skills, culture, and innovation capacity.'},
+  {t:'demand',q:'What 2 criteria must be met for information to reach "info status"?',a:'<strong>1.</strong> It is objectively needed (for a decision)<br><strong>2.</strong> It can actually be supplied (accessible, available)'},
+  {t:'demand',q:'According to Spitzer, how much information can the human brain process per second?',a:'Approximately <strong>0.1 GB per second</strong> — highlighting the importance of filtering and prioritizing information.'},
+  {t:'demand',q:'What are the 4 categories of information users?',a:'<strong>1. Potential users</strong> — could use the info<br><strong>2. Supposed users</strong> — expected to use it<br><strong>3. Actual users</strong> — do use it<br><strong>4. Users</strong> (who actively engage with it)'},
+  {t:'demand',q:'What does CSF stand for and what is its purpose?',a:'<strong>Critical Success Factors</strong> — the key areas or activities that are essential for an organization to achieve its goals. Help identify what info is truly needed.'},
+
+  // TOPIC 5: Information Supply
+  {t:'supply',q:'Name the 2 key managerial tasks regarding information sources.',a:'<strong>1. Selection and evaluation</strong> — choosing relevant, reliable sources<br><strong>2. Quality assurance</strong> — ensuring ongoing accuracy and relevance'},
+  {t:'supply',q:'What is structural metadata? Give an example.',a:'Metadata describing <strong>how compound objects are assembled</strong>. Example: how pages form chapters, chapters form a book — it defines the structure/navigation of a document.'},
+  {t:'supply',q:'Name the 2 basic types of metadata.',a:'<strong>1. Formal metadata</strong> — administrative info (author, date, format, size)<br><strong>2. Content-related metadata</strong> — what the content is about (subject, keywords, summary)'},
+  {t:'supply',q:'What are Socrates\' 3 filters for evaluating information before sharing it?',a:'<strong>1. Truth</strong> — Is it certainly true?<br><strong>2. Goodness</strong> — Is it good/positive?<br><strong>3. Usefulness</strong> — Is it useful?<br>If none apply, don\'t pass it on.'},
+  {t:'supply',q:'A user clicks on certain articles in Google News. What type of user modeling is this?',a:'<strong>Implicit user modeling</strong> — user preferences are inferred from behavior (clicks, time spent) rather than explicit statements.'},
+  {t:'supply',q:'What are the 2 classes of portals distinguished by topic coverage?',a:'<strong>1. Horizontal portals</strong> — cover many topics for a broad audience (e.g. Yahoo)<br><strong>2. Vertical portals</strong> — focus on specific topic/industry (e.g. medical portal)'},
+  {t:'supply',q:'Name the 4 perspectives of data quality.',a:'<strong>1. Intrinsic</strong> — accuracy, believability<br><strong>2. Contextual</strong> — relevancy, timeliness, completeness<br><strong>3. Representational</strong> — interpretability, format consistency<br><strong>4. Accessibility</strong> — ease of access and security'},
+  {t:'supply',q:'Name the 3 types of information value.',a:'<strong>1. Normative</strong> — theoretically optimal value<br><strong>2. Realistic</strong> — actual market value<br><strong>3. Subjective</strong> — perceived value by individual user'},
+  {t:'supply',q:'Define a data warehouse and name its purpose.',a:'A <strong>standardized, structured, and integrated repository</strong> of historical data, optimized for analytical queries — NOT for transactions. Used for business intelligence and decision support.'},
+  {t:'supply',q:'Why do external security researchers often find vulnerabilities that internal teams miss?',a:'<strong>1. Different expertise/attacker mindset</strong> — approach systems as adversaries<br><strong>2. Many eyes principle</strong> — diverse perspectives catch more issues'},
+
+  // TOPIC 6: Modeling IS (ARIS)
+  {t:'aris',q:'Name the 3 description layers of ARIS.',a:'<strong>1. Requirements definition</strong> — what is needed (business view)<br><strong>2. Design specification</strong> — how it will be built (IT design)<br><strong>3. Implementation description</strong> — actual technical implementation'},
+  {t:'aris',q:'Name the 4 views of the ARIS framework.',a:'<strong>1. Data view</strong> — information and data<br><strong>2. Functions view</strong> — tasks and activities<br><strong>3. Control view</strong> — process flows (combines data + functions)<br><strong>4. Organization view</strong> — people, units, roles'},
+  {t:'aris',q:'What does the Organization view in ARIS capture?',a:'<strong>Human resources and their relationships</strong> — organizational units, positions, roles, and reporting structures.'},
+  {t:'aris',q:'What does EPC stand for and what does it model?',a:'<strong>Event-driven Process Chain</strong> — models business processes showing <strong>time and logic dependencies</strong> between events and functions. Events trigger functions; functions produce events.'},
+  {t:'aris',q:'Name the 3 core elements of an Entity-Relationship (ER) model.',a:'<strong>1. Entities</strong> — real-world objects (e.g. Customer, Product)<br><strong>2. Attributes</strong> — properties of entities<br><strong>3. Relationships</strong> — associations between entities'},
+  {t:'aris',q:'What does XOR mean in an EPC process model?',a:'<strong>Exclusive OR</strong> — exactly ONE branch can be taken. Branches are mutually exclusive. Differs from OR (one or more) and AND (all branches).'},
+  {t:'aris',q:'True or False: EPCs cannot be standardized because they are too flexible.',a:'<strong>False.</strong> EPCs CAN be standardized — standardization is actually one of their key use cases in large organizations.'},
+  {t:'aris',q:'How does BPMN differ from EPC in process modeling?',a:'<strong>BPMN</strong> is more <strong>precise and flexible</strong> (richer notation, better for technical implementation) but <strong>harder to learn</strong>. EPCs are simpler and more business-friendly.'},
+  {t:'aris',q:'What is the objective of data modeling in IS?',a:'To create a <strong>formal, unambiguous description of enterprise data</strong> — its structure, relationships, and constraints — independent of implementation.'},
+  {t:'aris',q:'Name 3 approaches to reduce process run-time.',a:'<strong>1. Outsourcing</strong> — delegate non-core activities<br><strong>2. Parallelization</strong> — run steps simultaneously<br><strong>3. Integration</strong> — eliminate handoffs between systems/people'},
+
+  // TOPIC 7: Innovative ICT
+  {t:'ict',q:'What is a Digital Twin?',a:'A <strong>virtual representation of a physical object or system</strong> that is continuously updated with real-time data from sensors — enabling simulation, monitoring, and prediction.'},
+  {t:'ict',q:'What are the 2 key factors in the Technology Acceptance Model (TAM)?',a:'<strong>1. Perceived usefulness</strong> — belief that the technology improves performance<br><strong>2. Perceived ease of use</strong> — belief that using it requires minimal effort'},
+  {t:'ict',q:'What does UTAUT add to TAM?',a:'<strong>Social influence</strong> (others expect me to use it) and <strong>Facilitating conditions</strong> (infrastructure exists to support use).'},
+  {t:'ict',q:'Name Rogers\' 5 innovation characteristics that influence adoption.',a:'<strong>1. Relative advantage</strong><br><strong>2. Compatibility</strong><br><strong>3. Complexity</strong><br><strong>4. Trialability</strong><br><strong>5. Observability</strong>'},
+  {t:'ict',q:'Name the 5 adopter categories in Rogers\' diffusion curve.',a:'<strong>1.</strong> Innovators (~2.5%)<br><strong>2.</strong> Early Adopters (~13.5%)<br><strong>3.</strong> Early Majority (~34%)<br><strong>4.</strong> Late Majority (~34%)<br><strong>5.</strong> Laggards (~16%)'},
+  {t:'ict',q:'Name the 4 elements of Rogers\' diffusion of innovation.',a:'<strong>1. Innovation</strong> — the new idea/technology<br><strong>2. Communication channels</strong> — how info spreads<br><strong>3. Time</strong> — adoption follows an S-curve<br><strong>4. Social system</strong> — the community adopting it'},
+  {t:'ict',q:'How does RPA (Robotic Process Automation) interact with systems? Does it use APIs?',a:'RPA interacts through the <strong>user interface</strong> like a human would — clicking buttons, entering data. It does <strong>NOT use APIs</strong>. This allows automation without changing underlying systems.'},
+  {t:'ict',q:'Is blockchain centralized or decentralized?',a:'<strong>Decentralized</strong> — data is distributed across many nodes, with no single point of control. This enables trustless, tamper-resistant record-keeping.'},
+  {t:'ict',q:'What is process mining?',a:'Analyzing existing processes by <strong>extracting event logs</strong> from IS (e.g. ERP) to discover, monitor, and improve actual process behavior — reveals what REALLY happens vs. what was modeled.'},
+  {t:'ict',q:'What is the key differentiating factor of a social system in diffusion theory?',a:'Its <strong>structure</strong> — the arrangement pattern of its units and how they relate to each other. Different structures lead to different diffusion speeds and patterns.'},
+
+  // TOPIC 8: China Digital Business
+  {t:'china',q:'What are the 2 defining features of social commerce?',a:'<strong>1. Social interaction and sharing</strong> — purchases influenced by social connections<br><strong>2. User-generated content</strong> — reviews, recommendations, livestreams'},
+  {t:'china',q:'Who are the primary target segments of Chinese FinTech?',a:'<strong>1. Rural and underbanked populations</strong> — previously excluded from traditional banking<br><strong>2. Small and micro businesses</strong> — underserved by traditional financial institutions'},
+  {t:'china',q:'What is Guanxi, and is it about financial obligations?',a:'Guanxi (关系) = <strong>personal trust, reciprocal favors, and relationship networks</strong>. It is <strong>NOT</strong> about financial obligations — it\'s about social capital and mutual goodwill.'},
+  {t:'china',q:'What is Shein\'s reverse-manufacturing model?',a:'<strong>Produce based on actual demand, not forecasts</strong> — test small batches, read real-time demand signals, then scale production. Reduces waste and inventory risk dramatically.'},
+  {t:'china',q:'How do Chinese super apps (WeChat, Alipay) grow?',a:'<strong>1. Vertical integration</strong> — deepen services within existing categories<br><strong>2. Diversification / platform envelopment</strong> — absorb adjacent services to become one-stop ecosystem'},
+  {t:'china',q:'What is the key feature of community group buying (社区团购)?',a:'It <strong>eliminates distribution layers</strong> — goods go directly from suppliers/farmers to community pickup points, cutting costs and improving freshness.'},
+  {t:'china',q:'An app delivers OTC drugs in 30 minutes. What economic model is this?',a:'The <strong>on-demand economy</strong> — instant delivery of goods/services requested via platform, fulfilled locally.'},
+  {t:'china',q:'What role do Chinese tech giants play in the broader economy?',a:'They <strong>create digital ecosystems</strong> that foster innovation by enabling millions of smaller businesses to plug into their infrastructure, payments, logistics, and data.'},
+  {t:'china',q:'Under China\'s E-Commerce Law, must platforms verify the businesses operating on them?',a:'<strong>Yes.</strong> Platforms are legally required to verify and register merchants — they bear responsibility for ensuring sellers are legitimate.'},
+  {t:'china',q:'Name 4 factors driving China\'s digital economy growth.',a:'<strong>1.</strong> Large population (scale effects)<br><strong>2.</strong> Mobile-first leapfrogging<br><strong>3.</strong> Weak traditional infrastructure (creating opportunity)<br><strong>4.</strong> Strong government support/strategy'},
+
+  // TOPIC 9: Management of IS & ICT
+  {t:'ismgmt',q:'Define Information System (IS).',a:'<strong>Humans and/or machines that create, process, store, and use information</strong>, interconnected via communication links. Key: IS includes the human element (unlike app systems).'},
+  {t:'ismgmt',q:'Name the 3 core functionalities of ICT.',a:'<strong>1. Storage</strong> — retain data<br><strong>2. Processing</strong> — transform data<br><strong>3. Communication</strong> — transmit data'},
+  {t:'ismgmt',q:'What element is common to ALL ERP systems?',a:'<strong>Integration across the organization</strong> — a single shared database and common processes spanning multiple business functions (finance, HR, logistics, etc.).'},
+  {t:'ismgmt',q:'Name 5 disadvantages of ERP systems.',a:'<strong>1.</strong> Time-consuming to implement<br><strong>2.</strong> Expensive<br><strong>3.</strong> Vendor dependence<br><strong>4.</strong> High complexity<br><strong>5.</strong> Forced conformity to standard processes'},
+  {t:'ismgmt',q:'What is the difference between an IS and an application system?',a:'<strong>IS includes humans</strong> — the socio-technical system of people + technology.<br><strong>Application systems</strong> = purely technical software components, no human element.'},
+  {t:'ismgmt',q:'What benefit comes from ERP\'s common database management system (DBMS)?',a:'<strong>Information transparency</strong> — all departments see the same data in real time, eliminating data silos and reconciliation effort.'},
+  {t:'ismgmt',q:'What is Service-Oriented Architecture (SOA)?',a:'An architectural style where software is composed of <strong>reusable, loosely coupled services</strong> that communicate via standardized interfaces — enabling flexibility and reuse across systems.'},
+  {t:'ismgmt',q:'Name the 3 pairs used to classify systems.',a:'<strong>1. Open / Closed</strong> (interaction with environment)<br><strong>2. Dynamic / Static</strong> (changes over time)<br><strong>3. Simple / Complex</strong> (number of components and interactions)'},
+  {t:'ismgmt',q:'Must management evaluate and adopt every new technology that appears?',a:'<strong>No.</strong> Management must focus on <strong>strategically relevant technologies</strong> — evaluating all would be impossible and waste resources.'},
+  {t:'ismgmt',q:'What are the 2 main IS management tasks?',a:'<strong>1. Lifecycle management of individual applications</strong> — plan, build, run, retire<br><strong>2. Application portfolio management</strong> — optimize the entire set of systems strategically'},
+
+  // TOPIC 10: Knowledge Management
+  {t:'km',q:'What is the objective of Knowledge Management (KM)?',a:'<strong>Identifying, capturing, evaluating, retrieving, and sharing enterprise information assets</strong> — to leverage organizational knowledge as a competitive advantage.'},
+  {t:'km',q:'Give 3 examples of explicit knowledge.',a:'<strong>Policies, papers, reports</strong> — anything codified, written down, and transferable without personal contact.'},
+  {t:'km',q:'What is tacit knowledge?',a:'Knowledge that is <strong>personalized, subjective, and gained through experiential learning</strong> — difficult to articulate or transfer (e.g., expert intuition, craft skills).'},
+  {t:'km',q:'Name the 4 characteristics of a Data Warehouse.',a:'<strong>1. Subject-oriented</strong> — organized by business domain<br><strong>2. Integrated</strong> — from multiple sources<br><strong>3. Non-volatile</strong> — data not changed once loaded<br><strong>4. Time-variant</strong> — historical data preserved'},
+  {t:'km',q:'How does OLTP differ from OLAP?',a:'<strong>OLTP</strong> = Online Transaction Processing — operational, high-frequency, individual records (e.g. order entry)<br><strong>OLAP</strong> = Online Analytical Processing — strategic, lower frequency, aggregated analysis (e.g. sales trends)'},
+  {t:'km',q:'What technology enables the convergence of OLTP and OLAP?',a:'<strong>In-memory computing</strong> — storing data in RAM enables transactional AND analytical workloads on the same data in real time (e.g. SAP HANA).'},
+  {t:'km',q:'What operation is the complement of "drill down" in OLAP?',a:'<strong>Roll up</strong> (also called "drill up") — aggregating from detailed to summary level, e.g. from daily → monthly → yearly.'},
+  {t:'km',q:'Name 2 categories of knowledge acquisition approaches in KM.',a:'<strong>1. Internal</strong> — training, learning programs, internal wikis<br><strong>2. External</strong> — consulting, hiring experts, knowledge transfer from partners'},
+  {t:'km',q:'What is reverse mentoring?',a:'A practice where <strong>younger employees mentor senior/older employees</strong> — typically on technology, digital tools, and new trends.'},
+  {t:'km',q:'What is the most significant barrier to successful Knowledge Management?',a:'<strong>Corporate culture</strong> — people must be willing to share knowledge, which requires trust, incentives, and the right cultural norms.'},
+  {t:'km',q:'What type of motivation sustains Knowledge Management participation long-term?',a:'<strong>Intrinsic motivation</strong> — sharing knowledge because it is meaningful, fulfilling, or part of professional identity — not just for external rewards.'},
+
+  // TOPIC 11: Security & Privacy
+  {t:'security',q:'Name 3 benefits of using IT security standards.',a:'<strong>1.</strong> Encapsulate best practices<br><strong>2.</strong> Provide a common framework for communication<br><strong>3.</strong> Enable third-party trust / certification'},
+  {t:'security',q:'State Courtney\'s 2nd Law of security.',a:'"<strong>Never spend more on a countermeasure than the cost of tolerating the exposure</strong>." — Security investment must be proportional to the risk.'},
+  {t:'security',q:'What are the 2 corollaries of Courtney\'s 2nd Law?',a:'<strong>Corollary 1:</strong> Perfect security costs infinitely much (→ unattainable)<br><strong>Corollary 2:</strong> Zero risk cannot exist (→ some risk always remains)'},
+  {t:'security',q:'State Courtney\'s 3rd Law.',a:'"<strong>Technical and management/organizational security problems are inextricably intertwined.</strong>" — You cannot solve security with technology alone; culture and governance are equally critical.'},
+  {t:'security',q:'What is the difference between the GDPR Right to Access and the Right to Data Portability?',a:'<strong>Right to Access:</strong> Know what data is held about you<br><strong>Right to Portability:</strong> Receive your data in a machine-readable format and transfer it — gives you CONTROL over your data'},
+  {t:'security',q:'GPS location data — what GDPR data type is this?',a:'<strong>Observed data</strong> — data collected by tracking/observing user behavior (as opposed to provided/derived data).'},
+  {t:'security',q:'Which GDPR right is generally the least known by citizens?',a:'The <strong>Right to Data Portability</strong> — despite being powerful, most people are unaware they can request and transfer their data.'},
+  {t:'security',q:'What does ISO 27001 require organizations to do (4 key verbs)?',a:'<strong>Establish, implement, maintain, and continually improve</strong> an Information Security Management System (ISMS). Note: NOT "certify" — certification is optional.'},
+  {t:'security',q:'Are technical or human/organizational security measures deployed more frequently?',a:'<strong>Technical measures</strong> are deployed more often — firewalls, encryption, access controls. Human measures (training, policies) are often underinvested.'},
+  {t:'security',q:'Should an ISMS align with an organization\'s corporate objectives?',a:'<strong>Yes.</strong> An ISMS must be aligned with the organization\'s overall strategy and risk appetite — security cannot be designed in isolation.'},
+
+  // TOPIC 12: Managerial Functions & CIO
+  {t:'cio',q:'Name the 7 competencies of a CIO.',a:'<strong>1.</strong> Market awareness<br><strong>2.</strong> Leadership<br><strong>3.</strong> Visionary<br><strong>4.</strong> Strategic thinking<br><strong>5.</strong> Relationship building<br><strong>6.</strong> Diplomatic<br><strong>7.</strong> Reliable'},
+  {t:'cio',q:'Empathy, listening skills, and passion for technology — which CIO competency?',a:'<strong>Leadership competency</strong> — these interpersonal qualities enable a CIO to motivate teams, communicate vision, and drive change.'},
+  {t:'cio',q:'Define IT Governance.',a:'A <strong>framework specifying decision rights and accountabilities</strong> to encourage desirable IT behavior — who decides what, and who is accountable for IT decisions and outcomes.'},
+  {t:'cio',q:'What is COBIT and what does it address?',a:'<strong>COBIT</strong> = Control Objectives for Information and Related Technologies. A framework for the <strong>governance AND management of enterprise IT</strong> — covers both strategic oversight and operational management.'},
+  {t:'cio',q:'Name the 3 categories of reasons for IT outsourcing.',a:'<strong>1. Strategic</strong> — focus on core competencies<br><strong>2. Economic</strong> — cost reduction<br><strong>3. Technological</strong> — access to specialized expertise or newer tech'},
+  {t:'cio',q:'Name the 4 risk categories of IT outsourcing.',a:'<strong>1. Strategic risk</strong> — losing know-how, dependency<br><strong>2. Management risk</strong> — loss of control<br><strong>3. Cost risk</strong> — hidden costs, escalation<br><strong>4. Technological risk</strong> — outdated skills, lock-in'},
+  {t:'cio',q:'What is IT Controlling?',a:'Ensures that <strong>information processing satisfies both economic objectives</strong> (efficiency/cost) <strong>and performance objectives</strong> (effectiveness/quality). Monitors and steers IT performance.'},
+  {t:'cio',q:'Name the 4 organizational approaches for positioning IM in a company.',a:'<strong>1.</strong> Line instance (department in hierarchy)<br><strong>2.</strong> Main area (major organizational unit)<br><strong>3.</strong> Executive department (close to top management)<br><strong>4.</strong> Cross-departmental / matrix structure'},
+  {t:'cio',q:'Which part of the CIO\'s role should shrink over time?',a:'The <strong>operations / "keeping the lights on"</strong> portion — routine IT operations should be minimized (via automation/outsourcing) so CIOs can focus on strategic innovation.'},
+  {t:'cio',q:'Outsourcing IT know-how to a vendor creates which type of risk?',a:'<strong>Strategic risk</strong> — the organization becomes dependent on the vendor and loses internal capability, making it difficult to change suppliers or bring work back in-house.'},
+  {t:'cio',q:'What does the "Visionary" CIO competency include specifically?',a:'The ability to <strong>assess current technology trends</strong> and translate them into business opportunities — bridging the gap between emerging tech and organizational strategy.'},
+];
+
+// ============================================================
+// STATE & STORAGE
+// ============================================================
+let progress = {};  // { cardIndex: 'got'|'partial'|'missed' }
+let examsDone = 0;
+
+function saveProgress() {
+  const data = { progress, examsDone };
+  localStorage.setItem('im4dbProgress', JSON.stringify(data));
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem('im4dbProgress');
+    if (raw) {
+      const data = JSON.parse(raw);
+      progress = data.progress || {};
+      examsDone = data.examsDone || 0;
+    }
+  } catch(e) { progress = {}; examsDone = 0; }
+}
+
+function getTopicStats(topicId) {
+  const cards = CARDS.filter(c => c.t === topicId);
+  let got = 0, partial = 0, missed = 0;
+  cards.forEach((c, i) => {
+    const idx = CARDS.indexOf(c);
+    const r = progress[idx];
+    if (r === 'got') got++;
+    else if (r === 'partial') partial++;
+    else if (r === 'missed') missed++;
+  });
+  return { total: cards.length, got, partial, missed, seen: got+partial+missed };
+}
+
+function getGlobalStats() {
+  let got=0, partial=0, missed=0;
+  CARDS.forEach((c,i) => {
+    const r = progress[i];
+    if (r === 'got') got++;
+    else if (r === 'partial') partial++;
+    else if (r === 'missed') missed++;
+  });
+  return { got, partial, missed, seen: got+partial+missed };
+}
+
+// ============================================================
+// SECTION NAVIGATION
+// ============================================================
+let currentSection = 'dashboard';
+
+function showSection(id) {
+  ['dashboard','flashcards','exam'].forEach(s => {
+    const el = document.getElementById(s);
+    if(el) el.style.display = s === id ? 'block' : 'none';
+  });
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  const map = { dashboard: 0, flashcards: 1, exam: 2 };
+  document.querySelectorAll('nav button')[map[id]]?.classList.add('active');
+  currentSection = id;
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'flashcards') renderFlashcardSection();
+  if (id === 'exam') renderExamSetup();
+  window.scrollTo(0,0);
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const gs = getGlobalStats();
+  document.getElementById('statTotal').textContent = gs.seen;
+  document.getElementById('statGot').textContent = gs.got;
+  document.getElementById('statPartial').textContent = gs.partial;
+  document.getElementById('statMissed').textContent = gs.missed;
+  document.getElementById('statExams').textContent = examsDone;
+
+  const grid = document.getElementById('topicsGrid');
+  grid.innerHTML = TOPICS.map(tp => {
+    const s = getTopicStats(tp.id);
+    const pct = s.total > 0 ? Math.round(s.seen / s.total * 100) : 0;
+    return `<div class="topic-card" onclick="openTopic('${tp.id}')">
+      <div class="topic-num">T${tp.num}</div>
+      <h3>${tp.name}</h3>
+      <div class="desc">${tp.desc}</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="meta">
+        <span>${s.seen}/${s.total} seen</span>
+        <span class="got-it">${s.got} got it</span>
+        <span class="missed">${s.missed} missed</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openTopic(topicId) {
+  showSection('flashcards');
+  document.getElementById('fcTopicFilter').value = topicId;
+  initFlashcards();
+}
+
+// ============================================================
+// FLASHCARD ENGINE
+// ============================================================
+let fcQueue = [];
+let fcIndex = 0;
+let fcRevealed = false;
+
+function renderFlashcardSection() {
+  // Populate topic filter
+  const sel = document.getElementById('fcTopicFilter');
+  if (sel.children.length === 1) {
+    TOPICS.forEach(tp => {
+      const opt = document.createElement('option');
+      opt.value = tp.id;
+      opt.textContent = `T${tp.num}: ${tp.name}`;
+      sel.appendChild(opt);
+    });
+  }
+  initFlashcards();
+  renderTheory();
+}
+
+function initFlashcards() {
+  const topicFilter = document.getElementById('fcTopicFilter').value;
+  const order = document.getElementById('fcOrderFilter').value;
+
+  let cards = CARDS.map((c,i) => ({...c, idx:i}));
+  if (topicFilter !== 'all') cards = cards.filter(c => c.t === topicFilter);
+
+  if (order === 'random') {
+    cards = cards.sort(() => Math.random() - 0.5);
+  } else if (order === 'weak') {
+    cards = cards.sort((a,b) => {
+      const rank = r => r === 'missed' ? 0 : r === 'partial' ? 1 : r === 'got' ? 2 : 3;
+      return rank(progress[a.idx]) - rank(progress[b.idx]);
+    });
+  }
+
+  fcQueue = cards;
+  fcIndex = 0;
+  fcRevealed = false;
+  renderFlashcard();
+
+  const topicFilter2 = document.getElementById('fcTopicFilter').value;
+  const tp = TOPICS.find(t => t.id === topicFilter2);
+  document.getElementById('fcSectionTitle').textContent = tp ? `T${tp.num}: ${tp.name}` : 'All Flashcards';
+  renderTheory();
+}
+
+function renderFlashcard() {
+  const area = document.getElementById('fcArea');
+  if (fcQueue.length === 0) {
+    area.innerHTML = `<div class="fc-done-banner"><h3>No cards found</h3><p>Try changing the filter.</p></div>`;
+    return;
+  }
+  if (fcIndex >= fcQueue.length) {
+    // Done!
+    const gs = { got:0, partial:0, missed:0 };
+    fcQueue.forEach(c => {
+      const r = progress[c.idx];
+      if (r === 'got') gs.got++;
+      else if (r === 'partial') gs.partial++;
+      else if (r === 'missed') gs.missed++;
+    });
+    area.innerHTML = `<div class="fc-done-banner">
+      <h3>Round Complete!</h3>
+      <p>You went through all ${fcQueue.length} cards in this set.</p>
+      <div class="score-row">
+        <div class="score-item g"><div class="snum">${gs.got}</div><div class="slabel">Got it</div></div>
+        <div class="score-item p"><div class="snum">${gs.partial}</div><div class="slabel">Partial</div></div>
+        <div class="score-item m"><div class="snum">${gs.missed}</div><div class="slabel">Missed</div></div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+        <button class="rate-btn got-it" onclick="fcIndex=0;renderFlashcard()">Restart</button>
+        <button class="rate-btn partial" onclick="document.getElementById('fcOrderFilter').value='weak';initFlashcards()">Review Weak Cards</button>
+        <button class="rate-btn missed" onclick="showSection('dashboard')">Back to Dashboard</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  const card = fcQueue[fcIndex];
+  const topicObj = TOPICS.find(t => t.id === card.t);
+  const prevRating = progress[card.idx];
+  const ratingBadge = prevRating ?
+    `<span style="font-size:.72rem;padding:2px 8px;border-radius:4px;background:${prevRating==='got'?'#2ea04333':prevRating==='partial'?'#d2992233':'#f8514933'};color:${prevRating==='got'?'var(--green)':prevRating==='partial'?'var(--orange)':'var(--red)'}">Previously: ${prevRating}</span>` : '';
+
+  area.innerHTML = `
+    <div class="flashcard" id="fcCard">
+      <div class="fc-topic-label">T${topicObj.num}: ${topicObj.name}</div>
+      <div class="fc-counter">${fcIndex+1} / ${fcQueue.length} ${ratingBadge}</div>
+      <div class="fc-question">${card.q}</div>
+      <div class="fc-hint">Think about your answer, then click reveal</div>
+      <div class="fc-answer" id="fcAnswer">${card.a}</div>
+      <button class="reveal-btn" id="fcRevealBtn" onclick="revealAnswer()">Reveal Answer</button>
+      <div class="rating-bar hidden" id="fcRatingBar">
+        <button class="rate-btn got-it" onclick="rateCard('got')">Got it ✓</button>
+        <button class="rate-btn partial" onclick="rateCard('partial')">Partial ~</button>
+        <button class="rate-btn missed" onclick="rateCard('missed')">Missed it ✗</button>
+      </div>
+    </div>
+    <div class="fc-nav-row">
+      <button onclick="fcIndex=Math.max(0,fcIndex-1);renderFlashcard()">← Prev</button>
+      <button onclick="skipCard()">Skip →</button>
+    </div>
+    <div id="fcProgress2" style="text-align:center;margin-top:10px;font-size:.78rem;color:var(--text2)"></div>
+  `;
+  updateFcProgress();
+}
+
+function updateFcProgress() {
+  const el = document.getElementById('fcProgress');
+  if(el) el.textContent = `${fcIndex+1} / ${fcQueue.length}`;
+}
+
+function revealAnswer() {
+  document.getElementById('fcAnswer').classList.add('visible');
+  document.getElementById('fcRevealBtn').style.display = 'none';
+  document.getElementById('fcRatingBar').classList.remove('hidden');
+  document.querySelector('.fc-hint').style.display = 'none';
+  fcRevealed = true;
+}
+
+function rateCard(rating) {
+  const card = fcQueue[fcIndex];
+  progress[card.idx] = rating;
+  saveProgress();
+  fcIndex++;
+  fcRevealed = false;
+  renderFlashcard();
+  updateFcProgress();
+  // update dashboard stats silently
+}
+
+function skipCard() {
+  fcIndex++;
+  fcRevealed = false;
+  renderFlashcard();
+  updateFcProgress();
+}
+
+// ============================================================
+// THEORY CHEAT SHEET
+// ============================================================
+function renderTheory() {
+  const area = document.getElementById('theoryArea');
+  const topicFilter = document.getElementById('fcTopicFilter').value;
+  const tps = topicFilter === 'all' ? TOPICS : TOPICS.filter(t => t.id === topicFilter);
+
+  area.innerHTML = `<h3 style="margin-bottom:14px;color:var(--text2);font-size:.95rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Theory Cheat Sheets</h3>` +
+    tps.map(tp => `
+      <details class="collapsible-theory">
+        <summary>T${tp.num}: ${tp.name} <span class="caret" style="color:var(--text2)">▶</span></summary>
+        <div class="theory-inner">
+          <ul style="padding-left:18px">
+            ${tp.theory.map(t => `<li style="margin-bottom:7px;font-size:.87rem;color:var(--text2)">${t}</li>`).join('')}
+          </ul>
+        </div>
+      </details>
+    `).join('');
+}
+
+// ============================================================
+// EXAM SIMULATION
+// ============================================================
+let examTimer = null;
+let examTimeLeft = 0;
+let examQuestions = [];
+let examRatings = {};
+
+function renderExamSetup() {
+  const area = document.getElementById('examSetupArea');
+  const run = document.getElementById('examRunArea');
+  area.innerHTML = `<div class="exam-setup">
+    <h2>Exam Simulation</h2>
+    <p>12 random questions — one per topic — mimicking the free-text IM4DB exam format.<br>
+    You write your answer, then reveal the model answer and self-rate.<br>
+    <strong>Suggested time: 90 minutes</strong> (timer starts when you begin).</p>
+    <button onclick="startExam()">Start Exam</button>
+  </div>`;
+  run.classList.add('hidden');
+  if(examTimer) { clearInterval(examTimer); examTimer = null; }
+}
+
+function startExam() {
+  // Pick 1 random card per topic
+  examQuestions = TOPICS.map(tp => {
+    const cards = CARDS.filter(c => c.t === tp.id);
+    return cards[Math.floor(Math.random() * cards.length)];
+  });
+  examRatings = {};
+  examTimeLeft = 90 * 60; // 90 min in seconds
+
+  document.getElementById('examSetupArea').innerHTML = '';
+  const run = document.getElementById('examRunArea');
+  run.classList.remove('hidden');
+  renderExamRunning();
+
+  examTimer = setInterval(() => {
+    examTimeLeft--;
+    updateTimer();
+    if (examTimeLeft <= 0) {
+      clearInterval(examTimer);
+      examTimer = null;
+      submitExam();
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  const el = document.getElementById('examTimerEl');
+  if (!el) return;
+  const m = Math.floor(examTimeLeft/60);
+  const s = examTimeLeft % 60;
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer';
+  if (examTimeLeft <= 600) el.classList.add('danger');
+  else if (examTimeLeft <= 1800) el.classList.add('warning');
+}
+
+function renderExamRunning() {
+  const run = document.getElementById('examRunArea');
+  run.innerHTML = `
+    <div class="exam-running-header">
+      <div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:2px">Time Remaining</div>
+        <div class="timer" id="examTimerEl">90:00</div>
+      </div>
+      <div style="color:var(--text2);font-size:.88rem">12 Questions · Free-text · Self-rated</div>
+      <button onclick="if(confirm('Submit exam now?'))submitExam()" style="background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer">Submit Exam</button>
+    </div>
+    ${examQuestions.map((card, i) => {
+      const tp = TOPICS.find(t => t.id === card.t);
+      return `<div class="exam-q-card" id="eq-${i}">
+        <div class="eq-header">
+          <span class="eq-num">Question ${i+1}</span>
+          <span class="eq-topic">T${tp.num}: ${tp.name}</span>
+        </div>
+        <div class="eq-question">${card.q}</div>
+        <textarea placeholder="Write your answer here..." id="eq-ta-${i}"></textarea>
+        <div>
+          <button class="eq-reveal-btn" onclick="revealExamAnswer(${i})">Show model answer</button>
+        </div>
+        <div class="eq-answer-box" id="eq-ans-${i}">${card.a}</div>
+        <div class="eq-self-rate" id="eq-rate-${i}">
+          <span style="font-size:.8rem;color:var(--text2);margin-right:6px">Self-rate:</span>
+          <button class="eq-rate-btn got-it" onclick="rateExamQ(${i},'got')">Got it ✓</button>
+          <button class="eq-rate-btn partial" onclick="rateExamQ(${i},'partial')">Partial ~</button>
+          <button class="eq-rate-btn missed" onclick="rateExamQ(${i},'missed')">Missed ✗</button>
+        </div>
+      </div>`;
+    }).join('')}
+    <div class="exam-footer">
+      <button class="submit-exam-btn" onclick="if(confirm('Submit exam now?'))submitExam()">Submit & See Results</button>
+    </div>
+  `;
+}
+
+function revealExamAnswer(i) {
+  document.getElementById(`eq-ans-${i}`).classList.add('visible');
+  document.getElementById(`eq-rate-${i}`).classList.add('visible');
+  document.querySelector(`#eq-${i} .eq-reveal-btn`).style.display = 'none';
+}
+
+function rateExamQ(i, rating) {
+  examRatings[i] = rating;
+  // Highlight selected button
+  const btns = document.querySelectorAll(`#eq-rate-${i} .eq-rate-btn`);
+  btns.forEach(b => b.classList.remove('selected'));
+  const map = ['got-it','partial','missed'];
+  const cls = rating === 'got' ? 'got-it' : rating === 'partial' ? 'partial' : 'missed';
+  document.querySelector(`#eq-rate-${i} .eq-rate-btn.${cls}`)?.classList.add('selected');
+
+  // Save to global progress
+  const card = examQuestions[i];
+  const idx = CARDS.indexOf(card);
+  if (idx >= 0) { progress[idx] = rating; saveProgress(); }
+}
+
+function submitExam() {
+  if(examTimer) { clearInterval(examTimer); examTimer = null; }
+  examsDone++;
+  saveProgress();
+
+  let got=0, partial=0, missed=0, unrated=0;
+  examQuestions.forEach((_,i) => {
+    const r = examRatings[i];
+    if (r === 'got') got++;
+    else if (r === 'partial') partial++;
+    else if (r === 'missed') missed++;
+    else unrated++;
+  });
+
+  const modal = document.getElementById('resultsModal');
+  modal.classList.remove('hidden');
+  modal.innerHTML = `<div class="results-content">
+    <h2>Exam Complete</h2>
+    <div class="results-sub">Self-rated results · ${examsDone} exam${examsDone!==1?'s':''} completed total</div>
+    <div class="score-circle">
+      <div class="sc-num">${got}/12</div>
+      <div class="sc-label">Got it</div>
+    </div>
+    <div class="results-breakdown">
+      <div class="rb-row"><span>Got it ✓</span><span class="rb-val g">${got} questions</span></div>
+      <div class="rb-row"><span>Partial ~</span><span class="rb-val o">${partial} questions</span></div>
+      <div class="rb-row"><span>Missed ✗</span><span class="rb-val r">${missed} questions</span></div>
+      ${unrated ? `<div class="rb-row"><span>Unrated</span><span class="rb-val">${unrated}</span></div>` : ''}
+      <div class="rb-row"><span>Topics covered</span><span class="rb-val">All 12</span></div>
+    </div>
+    <div class="results-btns">
+      <button onclick="closeResults()">Review Answers</button>
+      <button class="primary" onclick="showSection('exam')">New Exam</button>
+      <button onclick="showSection('dashboard')">Dashboard</button>
+    </div>
+  </div>`;
+}
+
+function closeResults() {
+  document.getElementById('resultsModal').classList.add('hidden');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadProgress();
+renderDashboard();
+</script>
+</body>
+</html>
