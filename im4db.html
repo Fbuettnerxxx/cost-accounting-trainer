@@ -146,6 +146,51 @@ details[open] .caret{transform:rotate(90deg)}
 .results-content .results-btns button:hover{border-color:var(--accent);color:var(--accent2)}
 .results-content .results-btns button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .hidden{display:none!important}
+/* Mnemonic badge */
+.mnemonic-badge{display:inline-flex;align-items:center;gap:5px;background:#a371f722;color:var(--purple);border:1px solid #a371f744;border-radius:12px;padding:2px 10px;font-size:.72rem;font-weight:700;cursor:pointer;transition:.2s;user-select:none;margin-top:10px}
+.mnemonic-badge:hover{background:#a371f744}
+.mnemonic-expand{display:none;margin-top:6px;background:#a371f711;border:1px solid #a371f733;border-radius:8px;padding:8px 12px;font-size:.8rem;color:var(--text2);line-height:1.5}
+.mnemonic-expand.open{display:block;animation:fadeIn .2s ease}
+/* SRS stat chips */
+.sr-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:.82rem;display:flex;align-items:center;gap:8px}
+.sr-chip .sc-val{font-size:1.3rem;font-weight:700}
+/* Speed Round */
+.speed-setup{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:36px;max-width:500px;margin:30px auto;text-align:center}
+.speed-setup h2{margin-bottom:10px}
+.speed-setup p{color:var(--text2);margin-bottom:24px;font-size:.92rem}
+.speed-count-btns{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+.speed-count-btn{background:var(--card2);border:2px solid var(--border);color:var(--text);padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;transition:.2s}
+.speed-count-btn.selected,.speed-count-btn:hover{border-color:var(--accent);color:var(--accent2);background:#0065BD22}
+.speed-start-btn{background:linear-gradient(135deg,#f85149,#d29922);color:#fff;border:none;padding:14px 40px;border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:.15s;box-shadow:0 4px 20px #f8514944}
+.speed-start-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px #f8514966}
+/* Speed round card */
+.speed-card-wrap{max-width:680px;margin:0 auto}
+.speed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.streak-counter{display:flex;align-items:center;gap:6px;font-size:1.1rem;font-weight:700;color:var(--orange)}
+.speed-progress-text{color:var(--text2);font-size:.85rem}
+/* Timer ring */
+.timer-ring-wrap{display:flex;justify-content:center;margin-bottom:20px;position:relative}
+.timer-ring-wrap svg{transform:rotate(-90deg)}
+.timer-ring-wrap .timer-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;transition:color .5s}
+/* Speed flashcard */
+.speed-flashcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:36px 28px;text-align:center;position:relative;transition:border-color .3s}
+.speed-flashcard .sf-topic{font-size:.72rem;color:var(--text2);margin-bottom:12px}
+.speed-flashcard .sf-question{font-size:1.25rem;font-weight:600;line-height:1.5;margin-bottom:20px}
+.speed-flashcard .sf-answer{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-size:.95rem;line-height:1.7;text-align:left;display:none;margin-bottom:16px}
+.speed-flashcard .sf-answer.visible{display:block;animation:fadeIn .2s ease}
+.speed-rating{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.speed-rating .rate-btn{font-size:.85rem;padding:9px 20px}
+.auto-advance-bar{height:3px;background:var(--border);border-radius:2px;margin-top:14px;overflow:hidden}
+.auto-advance-fill{height:100%;background:var(--accent2);border-radius:2px;transition:width linear}
+/* Speed round results */
+.speed-results{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:40px 30px;max-width:560px;margin:30px auto;text-align:center}
+.speed-results h2{font-size:1.6rem;margin-bottom:6px}
+.speed-results .sr-sub{color:var(--text2);margin-bottom:24px}
+.speed-results .big-score{font-size:3.5rem;font-weight:700;color:var(--accent2);margin:16px 0}
+.speed-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:20px 0}
+.speed-stat-item{background:var(--bg);border-radius:8px;padding:14px 10px;text-align:center}
+.speed-stat-item .ssnum{font-size:1.5rem;font-weight:700}
+.speed-stat-item .sslabel{font-size:.75rem;color:var(--text2);margin-top:3px}
 @media(max-width:600px){
   .stats-grid{grid-template-columns:1fr 1fr}
   .topics-grid{grid-template-columns:1fr}
@@ -164,6 +209,8 @@ details[open] .caret{transform:rotate(90deg)}
   <nav>
     <button class="active" onclick="showSection('dashboard')">Dashboard</button>
     <button onclick="showSection('flashcards')">Flashcards</button>
+    <button onclick="showSection('smartreview')">⚡ Smart Review</button>
+    <button onclick="showSection('speedround')">🔥 Speed Round</button>
     <button onclick="showSection('exam')">Exam Simulation</button>
     <a class="nav-link" href="index.html">Cost Accounting →</a>
   </nav>
@@ -205,6 +252,25 @@ details[open] .caret{transform:rotate(90deg)}
     <div id="fcArea"></div>
     <!-- Theory cheat sheet below flashcards -->
     <div id="theoryArea" style="margin-top:30px"></div>
+  </div>
+
+  <!-- SMART REVIEW SECTION -->
+  <div id="smartreview" class="section" style="display:none">
+    <div class="section-header">
+      <h2>⚡ Smart Review</h2>
+      <button class="back-btn" onclick="showSection('dashboard')">← Dashboard</button>
+    </div>
+    <div id="srStatsBar" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px"></div>
+    <div id="srArea"></div>
+  </div>
+
+  <!-- SPEED ROUND SECTION -->
+  <div id="speedround" class="section" style="display:none">
+    <div class="section-header">
+      <h2>🔥 Speed Round</h2>
+      <button class="back-btn" onclick="showSection('dashboard')">← Dashboard</button>
+    </div>
+    <div id="speedArea"></div>
   </div>
 
   <!-- EXAM SECTION -->
@@ -448,7 +514,7 @@ const CARDS = [
   {t:'intro',q:'What are the 2 critical dimensions of digital transformation?',a:'<strong>1. Digital capabilities</strong> — technology, data, platforms<br><strong>2. Leadership capabilities</strong> — vision, change management, culture'},
   {t:'intro',q:'Is digital transformation fast and certain?',a:'<strong>No.</strong> It is <strong>uncertain and iterative</strong> — organizations must experiment, learn, and adapt continuously.'},
   {t:'intro',q:'What are the conditions for information to be considered an asset?',a:'<strong>1. Relative scarcity</strong> — not freely and universally available<br><strong>2. Economic demand</strong> — someone is willing to pay for it'},
-  {t:'intro',q:'Name the 3 layers of Information Management (IM).',a:'<strong>1. Information Economics</strong> — economic perspective on info<br><strong>2. Information Systems</strong> — organizational systems<br><strong>3. ICT</strong> — technical infrastructure'},
+  {t:'intro',q:'Name the 3 layers of Information Management (IM).',a:'<strong>1. Information Economics</strong> — economic perspective on info<br><strong>2. Information Systems</strong> — organizational systems<br><strong>3. ICT</strong> — technical infrastructure',mnemonic:{key:'ESI',phrase:'ESI — Economics, Systems, ICT'}},
   {t:'intro',q:'How does information differ from material assets? Name 5 characteristics.',a:'<strong>1.</strong> Low reproduction cost<br><strong>2.</strong> No depreciation by use<br><strong>3.</strong> Unlimited divisibility<br><strong>4.</strong> Simple logistics (digital transmission)<br><strong>5.</strong> Security problems (easy to copy/steal)'},
   {t:'intro',q:'What are the 3 McKinsey pitfalls in digital transformation?',a:'<strong>1.</strong> Siloed mindsets<br><strong>2.</strong> Lack of common culture<br><strong>3.</strong> Lack of common view of customers'},
   {t:'intro',q:'Does IM include executive tasks?',a:'<strong>Yes.</strong> IM spans from technical ICT management up to executive-level strategy and decision-making.'},
@@ -456,9 +522,9 @@ const CARDS = [
   {t:'intro',q:'What are the 6 types of models used in Information Management?',a:'<strong>1.</strong> Data models<br><strong>2.</strong> Process models<br><strong>3.</strong> Architecture models<br><strong>4.</strong> Service models<br><strong>5.</strong> Business models<br><strong>6.</strong> Ecosystem models'},
 
   // TOPIC 2: Digital Business Models
-  {t:'bm',q:'What are the 4 core elements of a business model?',a:'<strong>1. Value Proposition</strong> — what problem do we solve?<br><strong>2. Revenue Model</strong> — how do we earn money?<br><strong>3. Value Chain</strong> — how do we create value?<br><strong>4. Target Customer</strong> — for whom?'},
-  {t:'bm',q:'List all 9 boxes of the Business Model Canvas.',a:'<strong>1.</strong> Key Partners<br><strong>2.</strong> Key Activities<br><strong>3.</strong> Key Resources<br><strong>4.</strong> Value Propositions<br><strong>5.</strong> Customer Relationships<br><strong>6.</strong> Channels<br><strong>7.</strong> Customer Segments<br><strong>8.</strong> Cost Structure<br><strong>9.</strong> Revenue Streams'},
-  {t:'bm',q:'What are the 5 archetypes of IT-enabled business model innovation?',a:'<strong>1.</strong> Creating new digital businesses<br><strong>2.</strong> Rethinking value propositions<br><strong>3.</strong> Digital distribution channels<br><strong>4.</strong> Connecting digital consumers<br><strong>5.</strong> Reshaping knowledge via big data'},
+  {t:'bm',q:'What are the 4 core elements of a business model?',a:'<strong>1. Value Proposition</strong> — what problem do we solve?<br><strong>2. Revenue Model</strong> — how do we earn money?<br><strong>3. Value Chain</strong> — how do we create value?<br><strong>4. Target Customer</strong> — for whom?',mnemonic:{key:'VR VT',phrase:'Virtual Reality, Virtual Target'}},
+  {t:'bm',q:'List all 9 boxes of the Business Model Canvas.',a:'<strong>1.</strong> Key Partners<br><strong>2.</strong> Key Activities<br><strong>3.</strong> Key Resources<br><strong>4.</strong> Value Propositions<br><strong>5.</strong> Customer Relationships<br><strong>6.</strong> Channels<br><strong>7.</strong> Customer Segments<br><strong>8.</strong> Cost Structure<br><strong>9.</strong> Revenue Streams',mnemonic:{key:'KKK-V-CCC-CR',phrase:'3 Keys, Value, 3 Customers, Cost+Revenue'}},
+  {t:'bm',q:'What are the 5 archetypes of IT-enabled business model innovation?',a:'<strong>1.</strong> Creating new digital businesses<br><strong>2.</strong> Rethinking value propositions<br><strong>3.</strong> Digital distribution channels<br><strong>4.</strong> Connecting digital consumers<br><strong>5.</strong> Reshaping knowledge via big data',mnemonic:{key:'CRDCR',phrase:'Create, Rethink, Distribute, Connect, Reshape'}},
   {t:'bm',q:'What are the 3 roles of IT in business model patterns?',a:'<strong>1. Irrelevant</strong> — IT plays no special role<br><strong>2. Enabling</strong> — IT supports the business model<br><strong>3. Constitutive</strong> — Without IT the business model is impossible at scale'},
   {t:'bm',q:'Does digitalization mean creating a digital version of your OWN product only?',a:'<strong>No.</strong> Digitalization can apply to any product or service — your own or others\'. The scope is broader than just own offerings.'},
   {t:'bm',q:'Which BM pattern applies to a platform serving homogeneous individuals (e.g. peer lending)?',a:'The <strong>Peer-to-Peer pattern</strong> — connects individuals with similar needs/roles without intermediaries.'},
@@ -468,7 +534,7 @@ const CARDS = [
 
   // TOPIC 3: IT Strategy & Innovation
   {t:'strategy',q:'Name the 2 alignment perspectives in strategic IT alignment.',a:'<strong>1. Strategic fit</strong> — aligning IT strategy with business strategy<br><strong>2. Functional integration</strong> — aligning IT infrastructure with organizational infrastructure'},
-  {t:'strategy',q:'Name Porter\'s 5 competitive forces.',a:'<strong>1.</strong> Competitive rivalry (existing competitors)<br><strong>2.</strong> Supplier power<br><strong>3.</strong> Buyer power<br><strong>4.</strong> Threat of new entrants<br><strong>5.</strong> Threat of substitutes'},
+  {t:'strategy',q:'Name Porter\'s 5 competitive forces.',a:'<strong>1.</strong> Competitive rivalry (existing competitors)<br><strong>2.</strong> Supplier power<br><strong>3.</strong> Buyer power<br><strong>4.</strong> Threat of new entrants<br><strong>5.</strong> Threat of substitutes',mnemonic:{key:'RSBNS',phrase:'Real Smart Businesses Never Sleep'}},
   {t:'strategy',q:'The Kodak case illustrates which BM innovation archetype — and what failure?',a:'It illustrates <strong>"Creating new digital businesses"</strong> — Kodak invented digital photography but <strong>failed to cannibalize its own film business</strong> and was overtaken.'},
   {t:'strategy',q:'What strategies are associated with Airbnb and Netflix?',a:'<strong>Disintermediation</strong> (cutting out traditional middlemen like hotels/video stores) + <strong>Platform strategy</strong> (connecting supply and demand directly)'},
   {t:'strategy',q:'Are network effects the same as production economies of scale?',a:'<strong>No.</strong> Network effects = value of a product/service increases as MORE users join (demand side). Production economies of scale = cost per unit decreases with volume (supply side).'},
@@ -480,10 +546,10 @@ const CARDS = [
 
   // TOPIC 4: Information Demand
   {t:'demand',q:'What is the difference between objective and subjective information need?',a:'<strong>Objective need:</strong> The information actually required to make a correct decision (often determined externally/analytically).<br><strong>Subjective need:</strong> What decision-makers THINK they need — may be incomplete, biased, or wrong.'},
-  {t:'demand',q:'Name Wilson\'s 3 categories of information needs.',a:'<strong>1. Physiological</strong> — basic physical needs<br><strong>2. Affective</strong> — emotional/psychological needs<br><strong>3. Cognitive</strong> — knowledge and understanding needs'},
+  {t:'demand',q:'Name Wilson\'s 3 categories of information needs.',a:'<strong>1. Physiological</strong> — basic physical needs<br><strong>2. Affective</strong> — emotional/psychological needs<br><strong>3. Cognitive</strong> — knowledge and understanding needs',mnemonic:{key:'PAC',phrase:'PAC-Man (Physiological, Affective, Cognitive)'}},
   {t:'demand',q:'What are the 3 categories for assessing information demand?',a:'<strong>1. Objective methods</strong> — analysis of decisions, tasks, processes<br><strong>2. Subjective methods</strong> — interviews, surveys of decision-makers<br><strong>3. Mixed methods</strong> — combining both approaches'},
-  {t:'demand',q:'What does S.M.A.R.T. stand for (in goal setting)?',a:'<strong>S</strong>pecific<br><strong>M</strong>easurable<br><strong>A</strong>ssignable (or Achievable)<br><strong>R</strong>ealistic<br><strong>T</strong>ime-related'},
-  {t:'demand',q:'Name the 4 perspectives of the Balanced Scorecard.',a:'<strong>1. Financial</strong><br><strong>2. Customer</strong><br><strong>3. Internal Process</strong><br><strong>4. Learning & Growth</strong>'},
+  {t:'demand',q:'What does S.M.A.R.T. stand for (in goal setting)?',a:'<strong>S</strong>pecific<br><strong>M</strong>easurable<br><strong>A</strong>ssignable (or Achievable)<br><strong>R</strong>ealistic<br><strong>T</strong>ime-related',mnemonic:{key:'SMART',phrase:'Already a mnemonic — Specific, Measurable, Assignable, Realistic, Time'}},
+  {t:'demand',q:'Name the 4 perspectives of the Balanced Scorecard.',a:'<strong>1. Financial</strong><br><strong>2. Customer</strong><br><strong>3. Internal Process</strong><br><strong>4. Learning & Growth</strong>',mnemonic:{key:'FCIL',phrase:'For CIOs It\'s Learning'}},
   {t:'demand',q:'Which BSC perspective addresses the ability to change and improve over time?',a:'The <strong>Learning & Growth</strong> perspective — covers employee skills, culture, and innovation capacity.'},
   {t:'demand',q:'What 2 criteria must be met for information to reach "info status"?',a:'<strong>1.</strong> It is objectively needed (for a decision)<br><strong>2.</strong> It can actually be supplied (accessible, available)'},
   {t:'demand',q:'According to Spitzer, how much information can the human brain process per second?',a:'Approximately <strong>0.1 GB per second</strong> — highlighting the importance of filtering and prioritizing information.'},
@@ -494,20 +560,20 @@ const CARDS = [
   {t:'supply',q:'Name the 2 key managerial tasks regarding information sources.',a:'<strong>1. Selection and evaluation</strong> — choosing relevant, reliable sources<br><strong>2. Quality assurance</strong> — ensuring ongoing accuracy and relevance'},
   {t:'supply',q:'What is structural metadata? Give an example.',a:'Metadata describing <strong>how compound objects are assembled</strong>. Example: how pages form chapters, chapters form a book — it defines the structure/navigation of a document.'},
   {t:'supply',q:'Name the 2 basic types of metadata.',a:'<strong>1. Formal metadata</strong> — administrative info (author, date, format, size)<br><strong>2. Content-related metadata</strong> — what the content is about (subject, keywords, summary)'},
-  {t:'supply',q:'What are Socrates\' 3 filters for evaluating information before sharing it?',a:'<strong>1. Truth</strong> — Is it certainly true?<br><strong>2. Goodness</strong> — Is it good/positive?<br><strong>3. Usefulness</strong> — Is it useful?<br>If none apply, don\'t pass it on.'},
+  {t:'supply',q:'What are Socrates\' 3 filters for evaluating information before sharing it?',a:'<strong>1. Truth</strong> — Is it certainly true?<br><strong>2. Goodness</strong> — Is it good/positive?<br><strong>3. Usefulness</strong> — Is it useful?<br>If none apply, don\'t pass it on.',mnemonic:{key:'TGU',phrase:'TGU — True, Good, Useful'}},
   {t:'supply',q:'A user clicks on certain articles in Google News. What type of user modeling is this?',a:'<strong>Implicit user modeling</strong> — user preferences are inferred from behavior (clicks, time spent) rather than explicit statements.'},
   {t:'supply',q:'What are the 2 classes of portals distinguished by topic coverage?',a:'<strong>1. Horizontal portals</strong> — cover many topics for a broad audience (e.g. Yahoo)<br><strong>2. Vertical portals</strong> — focus on specific topic/industry (e.g. medical portal)'},
-  {t:'supply',q:'Name the 4 perspectives of data quality.',a:'<strong>1. Intrinsic</strong> — accuracy, believability<br><strong>2. Contextual</strong> — relevancy, timeliness, completeness<br><strong>3. Representational</strong> — interpretability, format consistency<br><strong>4. Accessibility</strong> — ease of access and security'},
+  {t:'supply',q:'Name the 4 perspectives of data quality.',a:'<strong>1. Intrinsic</strong> — accuracy, believability<br><strong>2. Contextual</strong> — relevancy, timeliness, completeness<br><strong>3. Representational</strong> — interpretability, format consistency<br><strong>4. Accessibility</strong> — ease of access and security',mnemonic:{key:'ICRA',phrase:'ICRA (Intrinsic, Contextual, Representational, Accessibility)'}},
   {t:'supply',q:'Name the 3 types of information value.',a:'<strong>1. Normative</strong> — theoretically optimal value<br><strong>2. Realistic</strong> — actual market value<br><strong>3. Subjective</strong> — perceived value by individual user'},
   {t:'supply',q:'Define a data warehouse and name its purpose.',a:'A <strong>standardized, structured, and integrated repository</strong> of historical data, optimized for analytical queries — NOT for transactions. Used for business intelligence and decision support.'},
   {t:'supply',q:'Why do external security researchers often find vulnerabilities that internal teams miss?',a:'<strong>1. Different expertise/attacker mindset</strong> — approach systems as adversaries<br><strong>2. Many eyes principle</strong> — diverse perspectives catch more issues'},
 
   // TOPIC 6: Modeling IS (ARIS)
   {t:'aris',q:'Name the 3 description layers of ARIS.',a:'<strong>1. Requirements definition</strong> — what is needed (business view)<br><strong>2. Design specification</strong> — how it will be built (IT design)<br><strong>3. Implementation description</strong> — actual technical implementation'},
-  {t:'aris',q:'Name the 4 views of the ARIS framework.',a:'<strong>1. Data view</strong> — information and data<br><strong>2. Functions view</strong> — tasks and activities<br><strong>3. Control view</strong> — process flows (combines data + functions)<br><strong>4. Organization view</strong> — people, units, roles'},
+  {t:'aris',q:'Name the 4 views of the ARIS framework.',a:'<strong>1. Data view</strong> — information and data<br><strong>2. Functions view</strong> — tasks and activities<br><strong>3. Control view</strong> — process flows (combines data + functions)<br><strong>4. Organization view</strong> — people, units, roles',mnemonic:{key:'DFCO',phrase:'Don\'t Forget Control & Org'}},
   {t:'aris',q:'What does the Organization view in ARIS capture?',a:'<strong>Human resources and their relationships</strong> — organizational units, positions, roles, and reporting structures.'},
   {t:'aris',q:'What does EPC stand for and what does it model?',a:'<strong>Event-driven Process Chain</strong> — models business processes showing <strong>time and logic dependencies</strong> between events and functions. Events trigger functions; functions produce events.'},
-  {t:'aris',q:'Name the 3 core elements of an Entity-Relationship (ER) model.',a:'<strong>1. Entities</strong> — real-world objects (e.g. Customer, Product)<br><strong>2. Attributes</strong> — properties of entities<br><strong>3. Relationships</strong> — associations between entities'},
+  {t:'aris',q:'Name the 3 core elements of an Entity-Relationship (ER) model.',a:'<strong>1. Entities</strong> — real-world objects (e.g. Customer, Product)<br><strong>2. Attributes</strong> — properties of entities<br><strong>3. Relationships</strong> — associations between entities',mnemonic:{key:'EAR',phrase:'EAR (Entities, Attributes, Relationships)'}},
   {t:'aris',q:'What does XOR mean in an EPC process model?',a:'<strong>Exclusive OR</strong> — exactly ONE branch can be taken. Branches are mutually exclusive. Differs from OR (one or more) and AND (all branches).'},
   {t:'aris',q:'True or False: EPCs cannot be standardized because they are too flexible.',a:'<strong>False.</strong> EPCs CAN be standardized — standardization is actually one of their key use cases in large organizations.'},
   {t:'aris',q:'How does BPMN differ from EPC in process modeling?',a:'<strong>BPMN</strong> is more <strong>precise and flexible</strong> (richer notation, better for technical implementation) but <strong>harder to learn</strong>. EPCs are simpler and more business-friendly.'},
@@ -516,11 +582,11 @@ const CARDS = [
 
   // TOPIC 7: Innovative ICT
   {t:'ict',q:'What is a Digital Twin?',a:'A <strong>virtual representation of a physical object or system</strong> that is continuously updated with real-time data from sensors — enabling simulation, monitoring, and prediction.'},
-  {t:'ict',q:'What are the 2 key factors in the Technology Acceptance Model (TAM)?',a:'<strong>1. Perceived usefulness</strong> — belief that the technology improves performance<br><strong>2. Perceived ease of use</strong> — belief that using it requires minimal effort'},
-  {t:'ict',q:'What does UTAUT add to TAM?',a:'<strong>Social influence</strong> (others expect me to use it) and <strong>Facilitating conditions</strong> (infrastructure exists to support use).'},
-  {t:'ict',q:'Name Rogers\' 5 innovation characteristics that influence adoption.',a:'<strong>1. Relative advantage</strong><br><strong>2. Compatibility</strong><br><strong>3. Complexity</strong><br><strong>4. Trialability</strong><br><strong>5. Observability</strong>'},
-  {t:'ict',q:'Name the 5 adopter categories in Rogers\' diffusion curve.',a:'<strong>1.</strong> Innovators (~2.5%)<br><strong>2.</strong> Early Adopters (~13.5%)<br><strong>3.</strong> Early Majority (~34%)<br><strong>4.</strong> Late Majority (~34%)<br><strong>5.</strong> Laggards (~16%)'},
-  {t:'ict',q:'Name the 4 elements of Rogers\' diffusion of innovation.',a:'<strong>1. Innovation</strong> — the new idea/technology<br><strong>2. Communication channels</strong> — how info spreads<br><strong>3. Time</strong> — adoption follows an S-curve<br><strong>4. Social system</strong> — the community adopting it'},
+  {t:'ict',q:'What are the 2 key factors in the Technology Acceptance Model (TAM)?',a:'<strong>1. Perceived usefulness</strong> — belief that the technology improves performance<br><strong>2. Perceived ease of use</strong> — belief that using it requires minimal effort',mnemonic:{key:'U + E',phrase:'Useful + Easy'}},
+  {t:'ict',q:'What does UTAUT add to TAM?',a:'<strong>Social influence</strong> (others expect me to use it) and <strong>Facilitating conditions</strong> (infrastructure exists to support use).',mnemonic:{key:'SF',phrase:'Social Facilitation (Social influence + Facilitating conditions)'}},
+  {t:'ict',q:'Name Rogers\' 5 innovation characteristics that influence adoption.',a:'<strong>1. Relative advantage</strong><br><strong>2. Compatibility</strong><br><strong>3. Complexity</strong><br><strong>4. Trialability</strong><br><strong>5. Observability</strong>',mnemonic:{key:'RC-CTO',phrase:'RC like Remote Control, CTO like Chief Tech Officer'}},
+  {t:'ict',q:'Name the 5 adopter categories in Rogers\' diffusion curve.',a:'<strong>1.</strong> Innovators (~2.5%)<br><strong>2.</strong> Early Adopters (~13.5%)<br><strong>3.</strong> Early Majority (~34%)<br><strong>4.</strong> Late Majority (~34%)<br><strong>5.</strong> Laggards (~16%)',mnemonic:{key:'I-EA-EM-LM-L',phrase:'I Eat Every Leftover Lasagna'}},
+  {t:'ict',q:'Name the 4 elements of Rogers\' diffusion of innovation.',a:'<strong>1. Innovation</strong> — the new idea/technology<br><strong>2. Communication channels</strong> — how info spreads<br><strong>3. Time</strong> — adoption follows an S-curve<br><strong>4. Social system</strong> — the community adopting it',mnemonic:{key:'ICTS',phrase:'ICT + Social (Innovation, Channels, Time, Social system)'}},
   {t:'ict',q:'How does RPA (Robotic Process Automation) interact with systems? Does it use APIs?',a:'RPA interacts through the <strong>user interface</strong> like a human would — clicking buttons, entering data. It does <strong>NOT use APIs</strong>. This allows automation without changing underlying systems.'},
   {t:'ict',q:'Is blockchain centralized or decentralized?',a:'<strong>Decentralized</strong> — data is distributed across many nodes, with no single point of control. This enables trustless, tamper-resistant record-keeping.'},
   {t:'ict',q:'What is process mining?',a:'Analyzing existing processes by <strong>extracting event logs</strong> from IS (e.g. ERP) to discover, monitor, and improve actual process behavior — reveals what REALLY happens vs. what was modeled.'},
@@ -554,7 +620,7 @@ const CARDS = [
   {t:'km',q:'What is the objective of Knowledge Management (KM)?',a:'<strong>Identifying, capturing, evaluating, retrieving, and sharing enterprise information assets</strong> — to leverage organizational knowledge as a competitive advantage.'},
   {t:'km',q:'Give 3 examples of explicit knowledge.',a:'<strong>Policies, papers, reports</strong> — anything codified, written down, and transferable without personal contact.'},
   {t:'km',q:'What is tacit knowledge?',a:'Knowledge that is <strong>personalized, subjective, and gained through experiential learning</strong> — difficult to articulate or transfer (e.g., expert intuition, craft skills).'},
-  {t:'km',q:'Name the 4 characteristics of a Data Warehouse.',a:'<strong>1. Subject-oriented</strong> — organized by business domain<br><strong>2. Integrated</strong> — from multiple sources<br><strong>3. Non-volatile</strong> — data not changed once loaded<br><strong>4. Time-variant</strong> — historical data preserved'},
+  {t:'km',q:'Name the 4 characteristics of a Data Warehouse.',a:'<strong>1. Subject-oriented</strong> — organized by business domain<br><strong>2. Integrated</strong> — from multiple sources<br><strong>3. Non-volatile</strong> — data not changed once loaded<br><strong>4. Time-variant</strong> — historical data preserved',mnemonic:{key:'SINT',phrase:'SINT (Subject, Integrated, Non-volatile, Time-variant)'}},
   {t:'km',q:'How does OLTP differ from OLAP?',a:'<strong>OLTP</strong> = Online Transaction Processing — operational, high-frequency, individual records (e.g. order entry)<br><strong>OLAP</strong> = Online Analytical Processing — strategic, lower frequency, aggregated analysis (e.g. sales trends)'},
   {t:'km',q:'What technology enables the convergence of OLTP and OLAP?',a:'<strong>In-memory computing</strong> — storing data in RAM enables transactional AND analytical workloads on the same data in real time (e.g. SAP HANA).'},
   {t:'km',q:'What operation is the complement of "drill down" in OLAP?',a:'<strong>Roll up</strong> (also called "drill up") — aggregating from detailed to summary level, e.g. from daily → monthly → yearly.'},
@@ -564,9 +630,9 @@ const CARDS = [
   {t:'km',q:'What type of motivation sustains Knowledge Management participation long-term?',a:'<strong>Intrinsic motivation</strong> — sharing knowledge because it is meaningful, fulfilling, or part of professional identity — not just for external rewards.'},
 
   // TOPIC 11: Security & Privacy
-  {t:'security',q:'Name 3 benefits of using IT security standards.',a:'<strong>1.</strong> Encapsulate best practices<br><strong>2.</strong> Provide a common framework for communication<br><strong>3.</strong> Enable third-party trust / certification'},
+  {t:'security',q:'Name 3 benefits of using IT security standards.',a:'<strong>1.</strong> Encapsulate best practices<br><strong>2.</strong> Provide a common framework for communication<br><strong>3.</strong> Enable third-party trust / certification',mnemonic:{key:'BCT',phrase:'BCT (Best practice, Common framework, Third-party trust)'}},
   {t:'security',q:'State Courtney\'s 2nd Law of security.',a:'"<strong>Never spend more on a countermeasure than the cost of tolerating the exposure</strong>." — Security investment must be proportional to the risk.'},
-  {t:'security',q:'What are the 2 corollaries of Courtney\'s 2nd Law?',a:'<strong>Corollary 1:</strong> Perfect security costs infinitely much (→ unattainable)<br><strong>Corollary 2:</strong> Zero risk cannot exist (→ some risk always remains)'},
+  {t:'security',q:'What are the 2 corollaries of Courtney\'s 2nd Law?',a:'<strong>Corollary 1:</strong> Perfect security costs infinitely much (→ unattainable)<br><strong>Corollary 2:</strong> Zero risk cannot exist (→ some risk always remains)',mnemonic:{key:'PIN',phrase:'Perfect=Infinite, No zero risk'}},
   {t:'security',q:'State Courtney\'s 3rd Law.',a:'"<strong>Technical and management/organizational security problems are inextricably intertwined.</strong>" — You cannot solve security with technology alone; culture and governance are equally critical.'},
   {t:'security',q:'What is the difference between the GDPR Right to Access and the Right to Data Portability?',a:'<strong>Right to Access:</strong> Know what data is held about you<br><strong>Right to Portability:</strong> Receive your data in a machine-readable format and transfer it — gives you CONTROL over your data'},
   {t:'security',q:'GPS location data — what GDPR data type is this?',a:'<strong>Observed data</strong> — data collected by tracking/observing user behavior (as opposed to provided/derived data).'},
@@ -576,12 +642,12 @@ const CARDS = [
   {t:'security',q:'Should an ISMS align with an organization\'s corporate objectives?',a:'<strong>Yes.</strong> An ISMS must be aligned with the organization\'s overall strategy and risk appetite — security cannot be designed in isolation.'},
 
   // TOPIC 12: Managerial Functions & CIO
-  {t:'cio',q:'Name the 7 competencies of a CIO.',a:'<strong>1.</strong> Market awareness<br><strong>2.</strong> Leadership<br><strong>3.</strong> Visionary<br><strong>4.</strong> Strategic thinking<br><strong>5.</strong> Relationship building<br><strong>6.</strong> Diplomatic<br><strong>7.</strong> Reliable'},
+  {t:'cio',q:'Name the 7 competencies of a CIO.',a:'<strong>1.</strong> Market awareness<br><strong>2.</strong> Leadership<br><strong>3.</strong> Visionary<br><strong>4.</strong> Strategic thinking<br><strong>5.</strong> Relationship building<br><strong>6.</strong> Diplomatic<br><strong>7.</strong> Reliable',mnemonic:{key:'MLV-SRDR',phrase:"My Leader's Vision: Strategic Relationships, Diplomatic & Reliable"}},
   {t:'cio',q:'Empathy, listening skills, and passion for technology — which CIO competency?',a:'<strong>Leadership competency</strong> — these interpersonal qualities enable a CIO to motivate teams, communicate vision, and drive change.'},
   {t:'cio',q:'Define IT Governance.',a:'A <strong>framework specifying decision rights and accountabilities</strong> to encourage desirable IT behavior — who decides what, and who is accountable for IT decisions and outcomes.'},
   {t:'cio',q:'What is COBIT and what does it address?',a:'<strong>COBIT</strong> = Control Objectives for Information and Related Technologies. A framework for the <strong>governance AND management of enterprise IT</strong> — covers both strategic oversight and operational management.'},
-  {t:'cio',q:'Name the 3 categories of reasons for IT outsourcing.',a:'<strong>1. Strategic</strong> — focus on core competencies<br><strong>2. Economic</strong> — cost reduction<br><strong>3. Technological</strong> — access to specialized expertise or newer tech'},
-  {t:'cio',q:'Name the 4 risk categories of IT outsourcing.',a:'<strong>1. Strategic risk</strong> — losing know-how, dependency<br><strong>2. Management risk</strong> — loss of control<br><strong>3. Cost risk</strong> — hidden costs, escalation<br><strong>4. Technological risk</strong> — outdated skills, lock-in'},
+  {t:'cio',q:'Name the 3 categories of reasons for IT outsourcing.',a:'<strong>1. Strategic</strong> — focus on core competencies<br><strong>2. Economic</strong> — cost reduction<br><strong>3. Technological</strong> — access to specialized expertise or newer tech',mnemonic:{key:'SET',phrase:'SET (Strategic, Economic, Technological)'}},
+  {t:'cio',q:'Name the 4 risk categories of IT outsourcing.',a:'<strong>1. Strategic risk</strong> — losing know-how, dependency<br><strong>2. Management risk</strong> — loss of control<br><strong>3. Cost risk</strong> — hidden costs, escalation<br><strong>4. Technological risk</strong> — outdated skills, lock-in',mnemonic:{key:'SMCT',phrase:'SMC Tech (Strategic, Management, Cost, Technological)'}},
   {t:'cio',q:'What is IT Controlling?',a:'Ensures that <strong>information processing satisfies both economic objectives</strong> (efficiency/cost) <strong>and performance objectives</strong> (effectiveness/quality). Monitors and steers IT performance.'},
   {t:'cio',q:'Name the 4 organizational approaches for positioning IM in a company.',a:'<strong>1.</strong> Line instance (department in hierarchy)<br><strong>2.</strong> Main area (major organizational unit)<br><strong>3.</strong> Executive department (close to top management)<br><strong>4.</strong> Cross-departmental / matrix structure'},
   {t:'cio',q:'Which part of the CIO\'s role should shrink over time?',a:'The <strong>operations / "keeping the lights on"</strong> portion — routine IT operations should be minimized (via automation/outsourcing) so CIOs can focus on strategic innovation.'},
@@ -641,16 +707,18 @@ function getGlobalStats() {
 let currentSection = 'dashboard';
 
 function showSection(id) {
-  ['dashboard','flashcards','exam'].forEach(s => {
+  ['dashboard','flashcards','smartreview','speedround','exam'].forEach(s => {
     const el = document.getElementById(s);
     if(el) el.style.display = s === id ? 'block' : 'none';
   });
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  const map = { dashboard: 0, flashcards: 1, exam: 2 };
+  const map = { dashboard: 0, flashcards: 1, smartreview: 2, speedround: 3, exam: 4 };
   document.querySelectorAll('nav button')[map[id]]?.classList.add('active');
   currentSection = id;
   if (id === 'dashboard') renderDashboard();
   if (id === 'flashcards') renderFlashcardSection();
+  if (id === 'smartreview') renderSmartReview();
+  if (id === 'speedround') renderSpeedSetup();
   if (id === 'exam') renderExamSetup();
   window.scrollTo(0,0);
 }
@@ -783,7 +851,7 @@ function renderFlashcard() {
       <div class="fc-counter">${fcIndex+1} / ${fcQueue.length} ${ratingBadge}</div>
       <div class="fc-question">${card.q}</div>
       <div class="fc-hint">Think about your answer, then click reveal</div>
-      <div class="fc-answer" id="fcAnswer">${card.a}</div>
+      <div class="fc-answer" id="fcAnswer">${card.a}${card.mnemonic ? `<div class="mnemonic-badge" onclick="this.nextElementSibling.classList.toggle('open')">🧠 ${card.mnemonic.key}</div><div class="mnemonic-expand">"${card.mnemonic.phrase}"</div>` : ''}</div>
       <button class="reveal-btn" id="fcRevealBtn" onclick="revealAnswer()">Reveal Answer</button>
       <div class="rating-bar hidden" id="fcRatingBar">
         <button class="rate-btn got-it" onclick="rateCard('got')">Got it ✓</button>
@@ -1012,9 +1080,430 @@ function closeResults() {
 }
 
 // ============================================================
+// SPACED REPETITION SYSTEM (SRS)
+// ============================================================
+let srsData = {};
+
+function loadSRS() {
+  try {
+    const raw = localStorage.getItem('im4dbSRS');
+    if (raw) srsData = JSON.parse(raw);
+  } catch(e) { srsData = {}; }
+}
+
+function saveSRS() {
+  localStorage.setItem('im4dbSRS', JSON.stringify(srsData));
+}
+
+function getSRSCard(cardIdx) {
+  if (!srsData[cardIdx]) {
+    srsData[cardIdx] = { interval: 1, easeFactor: 2.5, nextReview: 0, repetitions: 0, lastReview: null };
+  }
+  return srsData[cardIdx];
+}
+
+function updateSRS(cardIdx, rating) {
+  const s = getSRSCard(cardIdx);
+  const now = Date.now();
+  s.lastReview = now;
+
+  if (rating === 'got') {
+    s.repetitions++;
+    if (s.repetitions === 1) s.interval = 1;
+    else if (s.repetitions === 2) s.interval = 10;
+    else s.interval = Math.round(s.interval * s.easeFactor);
+    s.easeFactor = Math.min(3.0, s.easeFactor + 0.1);
+    s.nextReview = now + s.interval * 60 * 1000; // minutes → ms
+  } else if (rating === 'partial') {
+    s.interval = Math.max(1, Math.round(s.interval * 0.6));
+    s.nextReview = now + s.interval * 60 * 1000;
+  } else { // missed
+    s.interval = 1;
+    s.repetitions = 0;
+    s.easeFactor = Math.max(1.3, s.easeFactor - 0.2);
+    s.nextReview = now + 60 * 1000; // 1 min
+  }
+  srsData[cardIdx] = s;
+  saveSRS();
+}
+
+function getDueCards() {
+  const now = Date.now();
+  return CARDS
+    .map((c, i) => ({ ...c, idx: i, srs: getSRSCard(i) }))
+    .filter(c => c.srs.nextReview <= now)
+    .sort((a, b) => a.srs.nextReview - b.srs.nextReview);
+}
+
+function getNextDueMs() {
+  const now = Date.now();
+  const future = CARDS
+    .map((c, i) => getSRSCard(i).nextReview)
+    .filter(t => t > now);
+  return future.length ? Math.min(...future) : null;
+}
+
+function getSRSStreak() {
+  const today = new Date().toDateString();
+  let streak = parseInt(localStorage.getItem('im4dbStreak') || '0');
+  const lastDay = localStorage.getItem('im4dbStreakDay') || '';
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (lastDay === today) return streak;
+  if (lastDay === yesterday) return streak; // will increment on first review today
+  return 0;
+}
+
+function markStreakToday() {
+  const today = new Date().toDateString();
+  const lastDay = localStorage.getItem('im4dbStreakDay') || '';
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  let streak = parseInt(localStorage.getItem('im4dbStreak') || '0');
+  if (lastDay === today) return;
+  if (lastDay === yesterday) streak++;
+  else streak = 1;
+  localStorage.setItem('im4dbStreak', streak);
+  localStorage.setItem('im4dbStreakDay', today);
+}
+
+function countLearnedToday() {
+  const today = new Date().toDateString();
+  return Object.values(srsData).filter(s => {
+    if (!s.lastReview) return false;
+    return new Date(s.lastReview).toDateString() === today;
+  }).length;
+}
+
+function formatTimeUntil(ms) {
+  const diff = ms - Date.now();
+  if (diff <= 0) return 'now';
+  const mins = Math.round(diff / 60000);
+  if (mins < 60) return `${mins} min`;
+  const hrs = Math.round(diff / 3600000);
+  if (hrs < 24) return `${hrs} hr`;
+  return `${Math.round(diff / 86400000)} days`;
+}
+
+// Smart Review state
+let srQueue = [];
+let srIndex = 0;
+let srRevealed = false;
+
+function renderSmartReview() {
+  const due = getDueCards();
+  const nextMs = getNextDueMs();
+  const streak = getSRSStreak();
+  const learnedToday = countLearnedToday();
+
+  // Stats bar
+  const statsBar = document.getElementById('srStatsBar');
+  statsBar.innerHTML = `
+    <div class="sr-chip"><div><div class="sc-val" style="color:var(--accent2)">${due.length}</div><div style="font-size:.75rem;color:var(--text2)">Due Now</div></div></div>
+    <div class="sr-chip"><div><div class="sc-val" style="color:var(--green)">${learnedToday}</div><div style="font-size:.75rem;color:var(--text2)">Reviewed Today</div></div></div>
+    <div class="sr-chip"><div><div class="sc-val" style="color:var(--orange)">${streak}</div><div style="font-size:.75rem;color:var(--text2)">Day Streak 🔥</div></div></div>
+  `;
+
+  const area = document.getElementById('srArea');
+
+  if (due.length === 0) {
+    const nextTime = nextMs ? formatTimeUntil(nextMs) : null;
+    area.innerHTML = `<div class="fc-done-banner" style="border-color:var(--accent2)">
+      <h3 style="color:var(--accent2)">All caught up! 🎉</h3>
+      <p>${nextTime ? `Next review in <strong>${nextTime}</strong>` : 'Add some cards to review by doing Flashcards first.'}</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+        <button class="rate-btn got-it" onclick="showSection('flashcards')">Go to Flashcards</button>
+        <button class="rate-btn partial" onclick="showSection('dashboard')">Dashboard</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  srQueue = due;
+  srIndex = 0;
+  srRevealed = false;
+  renderSRCard();
+}
+
+function renderSRCard() {
+  const area = document.getElementById('srArea');
+  if (srIndex >= srQueue.length) {
+    area.innerHTML = `<div class="fc-done-banner">
+      <h3>Smart Review Done!</h3>
+      <p>You reviewed all ${srQueue.length} due cards.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+        <button class="rate-btn got-it" onclick="renderSmartReview()">Refresh Queue</button>
+        <button class="rate-btn partial" onclick="showSection('dashboard')">Dashboard</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  const card = srQueue[srIndex];
+  const topicObj = TOPICS.find(t => t.id === card.t);
+  const srs = card.srs;
+  const overdueText = srs.nextReview === 0 ? 'New card' :
+    `Overdue by ${formatTimeUntil(srs.nextReview).replace('now','<1 min')}`;
+
+  area.innerHTML = `
+    <div class="flashcard" id="srCard">
+      <div class="fc-topic-label">T${topicObj.num}: ${topicObj.name}</div>
+      <div class="fc-counter">${srIndex+1} / ${srQueue.length} · <span style="color:var(--orange);font-size:.7rem">${overdueText}</span></div>
+      <div class="fc-question">${card.q}</div>
+      <div class="fc-hint">Think, then reveal</div>
+      <div class="fc-answer" id="srAnswer">${card.a}${card.mnemonic ? `<div class="mnemonic-badge" onclick="this.nextElementSibling.classList.toggle('open')">🧠 ${card.mnemonic.key}</div><div class="mnemonic-expand">"${card.mnemonic.phrase}"</div>` : ''}</div>
+      <button class="reveal-btn" id="srRevealBtn" onclick="revealSRAnswer()">Reveal Answer</button>
+      <div class="rating-bar hidden" id="srRatingBar">
+        <button class="rate-btn got-it" onclick="rateSRCard('got')">Got it ✓</button>
+        <button class="rate-btn partial" onclick="rateSRCard('partial')">Partial ~</button>
+        <button class="rate-btn missed" onclick="rateSRCard('missed')">Missed it ✗</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:.76rem;color:var(--text2)">
+      Interval: ${srs.interval} min · Ease: ${srs.easeFactor.toFixed(1)} · Reps: ${srs.repetitions}
+    </div>
+  `;
+}
+
+function revealSRAnswer() {
+  document.getElementById('srAnswer').classList.add('visible');
+  document.getElementById('srRevealBtn').style.display = 'none';
+  document.getElementById('srRatingBar').classList.remove('hidden');
+  document.querySelector('#srCard .fc-hint').style.display = 'none';
+}
+
+function rateSRCard(rating) {
+  const card = srQueue[srIndex];
+  updateSRS(card.idx, rating);
+  progress[card.idx] = rating;
+  saveProgress();
+  markStreakToday();
+
+  // Update stats bar
+  const learnedToday = countLearnedToday();
+  const streak = getSRSStreak();
+  const statsBar = document.getElementById('srStatsBar');
+  if (statsBar) {
+    const chips = statsBar.querySelectorAll('.sc-val');
+    if (chips[1]) chips[1].textContent = learnedToday;
+    if (chips[2]) chips[2].textContent = streak;
+  }
+
+  srIndex++;
+  srRevealed = false;
+  renderSRCard();
+}
+
+// ============================================================
+// SPEED ROUND
+// ============================================================
+let speedCards = [];
+let speedIdx = 0;
+let speedRevealed = false;
+let speedTimer = null;
+let speedAutoTimer = null;
+let speedTimeLeft = 30;
+let speedStreak = 0;
+let speedMaxStreak = 0;
+let speedResults = [];
+let speedCardCount = 10;
+let speedCardTimes = [];
+let speedCardStart = 0;
+
+function renderSpeedSetup() {
+  const area = document.getElementById('speedArea');
+  const due = getDueCards();
+  area.innerHTML = `<div class="speed-setup">
+    <h2>🔥 Speed Round</h2>
+    <p>30 seconds per card. Rate fast — SRS updates automatically.<br>${due.length} cards due now across all topics.</p>
+    <div style="font-size:.85rem;color:var(--text2);margin-bottom:16px">Number of cards:</div>
+    <div class="speed-count-btns">
+      <button class="speed-count-btn ${speedCardCount===10?'selected':''}" onclick="selectSpeedCount(10,this)">10 cards</button>
+      <button class="speed-count-btn ${speedCardCount===20?'selected':''}" onclick="selectSpeedCount(20,this)">20 cards</button>
+      <button class="speed-count-btn ${speedCardCount===9999?'selected':''}" onclick="selectSpeedCount(9999,this)">All Due (${due.length})</button>
+    </div>
+    <button class="speed-start-btn" onclick="startSpeedRound()">Start Speed Round 🚀</button>
+  </div>`;
+}
+
+function selectSpeedCount(n, btn) {
+  speedCardCount = n;
+  document.querySelectorAll('.speed-count-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function startSpeedRound() {
+  const due = getDueCards();
+  // Fall back to all cards (shuffled) if fewer due than requested
+  let pool = due.length > 0 ? due : CARDS.map((c,i) => ({...c,idx:i,srs:getSRSCard(i)}));
+  pool = pool.sort(() => Math.random() - 0.5);
+  speedCards = pool.slice(0, Math.min(speedCardCount, pool.length));
+  speedIdx = 0;
+  speedStreak = 0;
+  speedMaxStreak = 0;
+  speedResults = [];
+  speedCardTimes = [];
+  renderSpeedCard();
+}
+
+function renderSpeedCard() {
+  if (speedIdx >= speedCards.length) {
+    renderSpeedResults();
+    return;
+  }
+  speedRevealed = false;
+  speedTimeLeft = 30;
+  speedCardStart = Date.now();
+  clearTimers();
+
+  const card = speedCards[speedIdx];
+  const topicObj = TOPICS.find(t => t.id === card.t);
+  const area = document.getElementById('speedArea');
+  area.innerHTML = `<div class="speed-card-wrap">
+    <div class="speed-header">
+      <div class="streak-counter" id="speedStreakEl">🔥 ${speedStreak} streak</div>
+      <div class="speed-progress-text">${speedIdx+1} / ${speedCards.length}</div>
+    </div>
+    <div class="timer-ring-wrap">
+      <svg width="110" height="110" viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r="48" fill="none" stroke="var(--border)" stroke-width="7"/>
+        <circle id="speedRingCircle" cx="55" cy="55" r="48" fill="none" stroke="var(--accent2)" stroke-width="7"
+          stroke-dasharray="${2*Math.PI*48}" stroke-dashoffset="0" stroke-linecap="round" style="transition:stroke-dashoffset 1s linear,stroke .5s"/>
+      </svg>
+      <div class="timer-num" id="speedTimerNum" style="color:var(--accent2)">30</div>
+    </div>
+    <div class="speed-flashcard" id="speedFlashCard">
+      <div class="sf-topic">T${topicObj.num}: ${topicObj.name}</div>
+      <div class="sf-question">${card.q}</div>
+      <div class="sf-answer" id="sfAnswer">${card.a}${card.mnemonic ? `<div class="mnemonic-badge" onclick="this.nextElementSibling.classList.toggle('open')">🧠 ${card.mnemonic.key}</div><div class="mnemonic-expand">"${card.mnemonic.phrase}"</div>` : ''}</div>
+      <button class="reveal-btn" id="sfRevealBtn" onclick="revealSpeedAnswer()">Reveal Answer</button>
+      <div class="speed-rating hidden" id="sfRating">
+        <button class="rate-btn got-it" onclick="rateSpeedCard('got')">Got it ✓</button>
+        <button class="rate-btn partial" onclick="rateSpeedCard('partial')">Partial ~</button>
+        <button class="rate-btn missed" onclick="rateSpeedCard('missed')">Missed ✗</button>
+      </div>
+      <div class="auto-advance-bar hidden" id="sfAutoBar"><div class="auto-advance-fill" id="sfAutoFill" style="width:100%"></div></div>
+    </div>
+  </div>`;
+
+  startSpeedTimer();
+}
+
+function startSpeedTimer() {
+  const circumference = 2 * Math.PI * 48;
+  speedTimer = setInterval(() => {
+    speedTimeLeft--;
+    const el = document.getElementById('speedTimerNum');
+    const ring = document.getElementById('speedRingCircle');
+    if (!el || !ring) { clearTimers(); return; }
+
+    el.textContent = speedTimeLeft;
+    const offset = circumference * (1 - speedTimeLeft / 30);
+    ring.style.strokeDashoffset = offset;
+
+    if (speedTimeLeft <= 5) {
+      el.style.color = 'var(--red)';
+      ring.style.stroke = 'var(--red)';
+      document.getElementById('speedFlashCard').style.borderColor = 'var(--red)';
+    } else if (speedTimeLeft <= 15) {
+      el.style.color = 'var(--orange)';
+      ring.style.stroke = 'var(--orange)';
+      document.getElementById('speedFlashCard').style.borderColor = 'var(--orange)';
+    }
+
+    if (speedTimeLeft <= 0) {
+      clearTimers();
+      autoMissSpeed();
+    }
+  }, 1000);
+}
+
+function clearTimers() {
+  if (speedTimer) { clearInterval(speedTimer); speedTimer = null; }
+  if (speedAutoTimer) { clearTimeout(speedAutoTimer); speedAutoTimer = null; }
+}
+
+function autoMissSpeed() {
+  revealSpeedAnswer();
+  rateSpeedCard('missed');
+}
+
+function revealSpeedAnswer() {
+  clearTimers();
+  speedRevealed = true;
+  const ans = document.getElementById('sfAnswer');
+  const btn = document.getElementById('sfRevealBtn');
+  const rating = document.getElementById('sfRating');
+  const autoBar = document.getElementById('sfAutoBar');
+  if (ans) ans.classList.add('visible');
+  if (btn) btn.style.display = 'none';
+  if (rating) rating.classList.remove('hidden');
+  if (autoBar) {
+    autoBar.classList.remove('hidden');
+    // 5-second auto-advance fill
+    const fill = document.getElementById('sfAutoFill');
+    if (fill) {
+      fill.style.transition = 'width 5s linear';
+      requestAnimationFrame(() => { fill.style.width = '0%'; });
+    }
+    speedAutoTimer = setTimeout(() => rateSpeedCard('missed'), 5000);
+  }
+}
+
+function rateSpeedCard(rating) {
+  clearTimers();
+  const card = speedCards[speedIdx];
+  const elapsed = Math.round((Date.now() - speedCardStart) / 1000);
+  speedCardTimes.push(elapsed);
+
+  updateSRS(card.idx, rating);
+  progress[card.idx] = rating;
+  saveProgress();
+  markStreakToday();
+
+  if (rating === 'got') {
+    speedStreak++;
+    speedMaxStreak = Math.max(speedMaxStreak, speedStreak);
+  } else {
+    speedStreak = 0;
+  }
+  speedResults.push(rating);
+  speedIdx++;
+  renderSpeedCard();
+}
+
+function renderSpeedResults() {
+  const area = document.getElementById('speedArea');
+  const got = speedResults.filter(r => r === 'got').length;
+  const partial = speedResults.filter(r => r === 'partial').length;
+  const missed = speedResults.filter(r => r === 'missed').length;
+  const total = speedResults.length;
+  const accuracy = total > 0 ? Math.round((got / total) * 100) : 0;
+  const avgTime = speedCardTimes.length > 0 ? Math.round(speedCardTimes.reduce((a,b)=>a+b,0)/speedCardTimes.length) : 0;
+
+  area.innerHTML = `<div class="speed-results">
+    <h2>Speed Round Complete! 🏁</h2>
+    <div class="sr-sub">${total} cards reviewed</div>
+    <div class="big-score">${accuracy}%</div>
+    <div style="color:var(--text2);font-size:.85rem;margin-bottom:8px">accuracy</div>
+    <div class="speed-stats-grid">
+      <div class="speed-stat-item"><div class="ssnum" style="color:var(--green)">${got}</div><div class="sslabel">Got It</div></div>
+      <div class="speed-stat-item"><div class="ssnum" style="color:var(--orange)">${partial}</div><div class="sslabel">Partial</div></div>
+      <div class="speed-stat-item"><div class="ssnum" style="color:var(--red)">${missed}</div><div class="sslabel">Missed</div></div>
+      <div class="speed-stat-item"><div class="ssnum" style="color:var(--orange)">${avgTime}s</div><div class="sslabel">Avg Time</div></div>
+      <div class="speed-stat-item"><div class="ssnum" style="color:var(--purple)">${speedMaxStreak}</div><div class="sslabel">Best Streak 🔥</div></div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+      <button class="rate-btn got-it" onclick="renderSpeedSetup()">Play Again</button>
+      <button class="rate-btn partial" onclick="showSection('smartreview')">Smart Review</button>
+      <button class="rate-btn missed" onclick="showSection('dashboard')">Dashboard</button>
+    </div>
+  </div>`;
+}
+
+// ============================================================
 // INIT
 // ============================================================
 loadProgress();
+loadSRS();
 renderDashboard();
 </script>
 </body>
