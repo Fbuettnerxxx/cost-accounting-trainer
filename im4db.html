@@ -200,6 +200,47 @@ details[open] .caret{transform:rotate(90deg)}
   .rating-bar{gap:8px}
   .rate-btn{min-width:90px;padding:9px 14px;font-size:.82rem}
 }
+/* ==================== STUDY COACH ==================== */
+.coach-view{padding:30px 0}
+.coach-hero{background:linear-gradient(135deg,#0d1f3c,#0a1628);border:1px solid #1a3a6b;border-radius:14px;padding:30px 28px;margin-bottom:24px;position:relative;overflow:hidden}
+.coach-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,#0065BD33,transparent 70%);pointer-events:none}
+.coach-hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.coach-day-badge{display:flex;flex-direction:column}
+.coach-day-num{font-size:2.6rem;font-weight:800;color:var(--accent2);line-height:1}
+.coach-day-label{font-size:.85rem;color:var(--text2);margin-top:2px}
+.coach-countdown{text-align:right}
+.coach-countdown .cdnum{font-size:2rem;font-weight:700;color:var(--orange);line-height:1}
+.coach-countdown .cdlabel{font-size:.8rem;color:var(--text2);margin-top:2px}
+.coach-phase{display:inline-flex;align-items:center;gap:8px;background:#0065BD22;border:1px solid #0065BD55;border-radius:8px;padding:8px 16px;font-size:.95rem;font-weight:600;color:var(--accent2);margin-bottom:16px}
+.coach-overall-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.coach-overall-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:.5s}
+.coach-bar-label{font-size:.75rem;color:var(--text2);display:flex;justify-content:space-between}
+.coach-tasks{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.coach-task{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:.2s}
+.coach-task.done{background:#0d2218;border-color:#2ea04344}
+.coach-task.active-task{border-color:var(--accent);background:#0d1f3c}
+.coach-task-icon{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;transition:.2s}
+.coach-task.done .coach-task-icon{background:var(--green);border-color:var(--green);color:#fff}
+.coach-task-body{flex:1;min-width:0}
+.coach-task-label{font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.coach-task.done .coach-task-label{color:var(--text2);text-decoration:line-through}
+.coach-task-meta{font-size:.75rem;color:var(--text2)}
+.coach-task-btn{background:var(--accent);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:.15s;flex-shrink:0;white-space:nowrap}
+.coach-task-btn:hover{background:var(--accent2)}
+.coach-task-btn.done-btn{background:transparent;border:1px solid var(--green);color:var(--green);cursor:default}
+.coach-done-banner{background:linear-gradient(135deg,#0d2218,#0a1628);border:1px solid var(--green);border-radius:14px;padding:36px;text-align:center;margin-bottom:24px}
+.coach-done-banner h3{font-size:1.6rem;color:var(--green);margin-bottom:8px}
+.coach-done-banner p{color:var(--text2);font-size:.95rem}
+.coach-confetti{font-size:2rem;display:block;margin-bottom:8px}
+.coach-exam-banner{background:linear-gradient(135deg,#1a0e3c,#0d1628);border:2px solid var(--purple);border-radius:14px;padding:40px;text-align:center;margin-bottom:24px}
+.coach-exam-banner h2{font-size:2rem;color:var(--purple);margin-bottom:10px}
+.coach-caught-up{background:#1a0e0d;border:1px solid var(--orange);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:.88rem;color:var(--orange)}
+.theory-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
+.theory-panel h4{color:var(--accent2);margin-bottom:12px;font-size:1rem}
+.theory-panel ul{padding-left:18px}
+.theory-panel li{margin-bottom:6px;color:var(--text2);font-size:.87rem}
+.coach-back-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;margin-bottom:20px;display:inline-block}
+.coach-back-btn:hover{border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -207,19 +248,25 @@ details[open] .caret{transform:rotate(90deg)}
 <div class="container">
   <div class="logo">TUM IM4DB<span>Exam Trainer</span></div>
   <nav>
-    <button class="active" onclick="showSection('dashboard')">Dashboard</button>
+    <button class="active" onclick="showSection('coach')">📅 Today's Plan</button>
+    <button onclick="showSection('dashboard')">Dashboard</button>
     <button onclick="showSection('flashcards')">Flashcards</button>
     <button onclick="showSection('smartreview')">⚡ Smart Review</button>
     <button onclick="showSection('speedround')">🔥 Speed Round</button>
-    <button onclick="showSection('exam')">Exam Simulation</button>
+    <button onclick="showSection('exam')">Exam Sim</button>
     <a class="nav-link" href="index.html">Cost Accounting →</a>
   </nav>
 </div>
 </header>
 
 <div class="container">
+  <!-- STUDY COACH -->
+  <div id="coach" class="section active" style="display:block">
+    <div id="coachArea"></div>
+  </div>
+
   <!-- DASHBOARD -->
-  <div id="dashboard" class="section active" style="display:block;padding:30px 0">
+  <div id="dashboard" class="section" style="display:none;padding:30px 0">
     <div class="stats-grid">
       <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">Cards Seen</div></div>
       <div class="stat-card"><div class="num" id="statGot" style="color:var(--green)">0</div><div class="label">Got It</div></div>
@@ -704,17 +751,18 @@ function getGlobalStats() {
 // ============================================================
 // SECTION NAVIGATION
 // ============================================================
-let currentSection = 'dashboard';
+let currentSection = 'coach';
 
 function showSection(id) {
-  ['dashboard','flashcards','smartreview','speedround','exam'].forEach(s => {
+  ['coach','dashboard','flashcards','smartreview','speedround','exam'].forEach(s => {
     const el = document.getElementById(s);
     if(el) el.style.display = s === id ? 'block' : 'none';
   });
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  const map = { dashboard: 0, flashcards: 1, smartreview: 2, speedround: 3, exam: 4 };
+  const map = { coach: 0, dashboard: 1, flashcards: 2, smartreview: 3, speedround: 4, exam: 5 };
   document.querySelectorAll('nav button')[map[id]]?.classList.add('active');
   currentSection = id;
+  if (id === 'coach') renderCoach();
   if (id === 'dashboard') renderDashboard();
   if (id === 'flashcards') renderFlashcardSection();
   if (id === 'smartreview') renderSmartReview();
@@ -1500,11 +1548,566 @@ function renderSpeedResults() {
 }
 
 // ============================================================
+// STUDY COACH
+// ============================================================
+const COACH_START = new Date('2026-07-05');
+const COACH_EXAM  = new Date('2026-07-28');
+COACH_START.setHours(0,0,0,0);
+COACH_EXAM.setHours(0,0,0,0);
+
+function getCoachDay() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (today < COACH_START) return 1;
+  const d = Math.floor((today - COACH_START) / 86400000) + 1;
+  return Math.max(1, Math.min(23, d));
+}
+
+function getDaysUntilExam() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.max(0, Math.floor((COACH_EXAM - today) / 86400000));
+}
+
+function getTodayKey() {
+  const today = new Date();
+  return today.toISOString().slice(0,10); // YYYY-MM-DD
+}
+
+function loadCoachProgress() {
+  try {
+    const raw = localStorage.getItem('im4dbCoachProgress');
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) { return {}; }
+}
+
+function saveCoachProgress(data) {
+  localStorage.setItem('im4dbCoachProgress', JSON.stringify(data));
+}
+
+function getTasksDoneForDay(dateKey) {
+  const cp = loadCoachProgress();
+  return cp[dateKey] || [];
+}
+
+function markTaskDone(taskIdx) {
+  const key = getTodayKey();
+  const cp = loadCoachProgress();
+  if (!cp[key]) cp[key] = [];
+  if (!cp[key][taskIdx]) cp[key][taskIdx] = true;
+  saveCoachProgress(cp);
+}
+
+// Topic ID → name mapping for coach display
+const TOPIC_META = {
+  'intro':    { num:1,  name:'Intro to IM',            id:'intro' },
+  'bm':       { num:2,  name:'Digital Business Models', id:'bm' },
+  'strategy': { num:3,  name:'IT Strategy',             id:'strategy' },
+  'demand':   { num:4,  name:'Info Demand',             id:'demand' },
+  'supply':   { num:5,  name:'Info Supply',             id:'supply' },
+  'aris':     { num:6,  name:'Modeling IS (ARIS)',       id:'aris' },
+  'ict':      { num:7,  name:'Innovative ICT',           id:'ict' },
+  'china':    { num:8,  name:'China Business',           id:'china' },
+  'ismgmt':   { num:9,  name:'Management IS',            id:'ismgmt' },
+  'km':       { num:10, name:'Knowledge Mgmt',           id:'km' },
+  'security': { num:11, name:'Security',                 id:'security' },
+  'cio':      { num:12, name:'Managerial Functions',     id:'cio' },
+};
+
+// The 25-day plan
+const COACH_PLAN = {
+  // Phase 1: LEARN (Days 1-6)
+  1: {
+    phase:'📚 Phase 1: Learning New Topics', phaseName:'LEARN',
+    tasks:[
+      {type:'theory',   topicId:'intro',    label:'Read cheat sheet: Intro to IM',         time:'~5 min'},
+      {type:'flashcards',topicId:'intro',   label:'Flashcards: Intro to IM',               time:'~10 min'},
+      {type:'theory',   topicId:'bm',       label:'Read cheat sheet: Digital Business Models', time:'~5 min'},
+      {type:'flashcards',topicId:'bm',      label:'Flashcards: Digital Business Models',   time:'~10 min'},
+      {type:'speed',    topicIds:['intro','bm'], count:10, label:"Speed Round: Today's topics (10 cards)", time:'~5 min'},
+    ]
+  },
+  2: {
+    phase:'📚 Phase 1: Learning New Topics', phaseName:'LEARN',
+    tasks:[
+      {type:'theory',   topicId:'strategy', label:'Read cheat sheet: IT Strategy',         time:'~5 min'},
+      {type:'flashcards',topicId:'strategy',label:'Flashcards: IT Strategy',               time:'~10 min'},
+      {type:'theory',   topicId:'demand',   label:'Read cheat sheet: Info Demand',         time:'~5 min'},
+      {type:'flashcards',topicId:'demand',  label:'Flashcards: Info Demand',               time:'~10 min'},
+      {type:'speed',    topicIds:['strategy','demand'], count:10, label:"Speed Round: Today's topics (10 cards)", time:'~5 min'},
+    ]
+  },
+  3: {
+    phase:'📚 Phase 1: Learning New Topics', phaseName:'LEARN',
+    tasks:[
+      {type:'theory',   topicId:'supply',   label:'Read cheat sheet: Info Supply',         time:'~5 min'},
+      {type:'flashcards',topicId:'supply',  label:'Flashcards: Info Supply',               time:'~10 min'},
+      {type:'theory',   topicId:'aris',     label:'Read cheat sheet: Modeling IS (ARIS)',  time:'~5 min'},
+      {type:'flashcards',topicId:'aris',    label:'Flashcards: Modeling IS (ARIS)',         time:'~10 min'},
+      {type:'speed',    topicIds:['supply','aris'], count:10, label:"Speed Round: Today's topics (10 cards)", time:'~5 min'},
+    ]
+  },
+  4: {
+    phase:'📚 Phase 1: Learning New Topics', phaseName:'LEARN',
+    tasks:[
+      {type:'theory',   topicId:'ict',      label:'Read cheat sheet: Innovative ICT',      time:'~5 min'},
+      {type:'flashcards',topicId:'ict',     label:'Flashcards: Innovative ICT',            time:'~10 min'},
+      {type:'theory',   topicId:'china',    label:'Read cheat sheet: China Business',      time:'~5 min'},
+      {type:'flashcards',topicId:'china',   label:'Flashcards: China Business',            time:'~10 min'},
+      {type:'speed',    topicIds:['ict','china'], count:10, label:"Speed Round: Today's topics (10 cards)", time:'~5 min'},
+    ]
+  },
+  5: {
+    phase:'📚 Phase 1: Learning New Topics', phaseName:'LEARN',
+    tasks:[
+      {type:'theory',   topicId:'ismgmt',   label:'Read cheat sheet: Management IS',       time:'~5 min'},
+      {type:'flashcards',topicId:'ismgmt',  label:'Flashcards: Management IS',             time:'~10 min'},
+      {type:'theory',   topicId:'km',       label:'Read cheat sheet: Knowledge Mgmt',      time:'~5 min'},
+      {type:'flashcards',topicId:'km',      label:'Flashcards: Knowledge Mgmt',            time:'~10 min'},
+      {type:'speed',    topicIds:['ismgmt','km'], count:10, label:"Speed Round: Today's topics (10 cards)", time:'~5 min'},
+    ]
+  },
+  6: {
+    phase:'📚 Phase 1: Learning New Topics', phaseName:'LEARN',
+    tasks:[
+      {type:'theory',   topicId:'security', label:'Read cheat sheet: Security & Privacy',  time:'~5 min'},
+      {type:'flashcards',topicId:'security',label:'Flashcards: Security & Privacy',        time:'~10 min'},
+      {type:'theory',   topicId:'cio',      label:'Read cheat sheet: Managerial Functions',time:'~5 min'},
+      {type:'flashcards',topicId:'cio',     label:'Flashcards: Managerial Functions',      time:'~10 min'},
+      {type:'speed',    topicIds:['security','cio'], count:10, label:"Speed Round: Today's topics (10 cards)", time:'~5 min'},
+    ]
+  },
+  // Phase 2: STRENGTHEN (Days 7-14)
+  7: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:20, label:'Speed Round: 20 cards',              time:'~10 min'},
+    ]
+  },
+  8: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:20, label:'Speed Round: 20 cards',              time:'~10 min'},
+    ]
+  },
+  9: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'exam',         label:'Exam Simulation #1',                    time:'~30 min'},
+    ]
+  },
+  10: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:20, topicMode:'weak', label:'Speed Round: 20 cards (weakest first)', time:'~10 min'},
+    ]
+  },
+  11: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:20, label:'Speed Round: 20 cards',              time:'~10 min'},
+    ]
+  },
+  12: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'exam',         label:'Exam Simulation #2',                    time:'~30 min'},
+    ]
+  },
+  13: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:20, label:'Speed Round: 20 cards',              time:'~10 min'},
+    ]
+  },
+  14: {
+    phase:'💪 Phase 2: Strengthen', phaseName:'STRENGTHEN',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:20, label:'Speed Round: 20 cards',              time:'~10 min'},
+    ]
+  },
+  // Phase 3: MASTER (Days 15-21)
+  15: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'exam',         label:'Exam Simulation #3',                    time:'~30 min'},
+    ]
+  },
+  16: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:9999, label:'Speed Round: All due cards',       time:'~15 min'},
+    ]
+  },
+  17: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'exam',         label:'Exam Simulation #4',                    time:'~30 min'},
+    ]
+  },
+  18: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:9999, label:'Speed Round: All due cards',       time:'~15 min'},
+    ]
+  },
+  19: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'exam',         label:'Exam Simulation #5',                    time:'~30 min'},
+    ]
+  },
+  20: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:9999, label:'Speed Round: All due cards',       time:'~15 min'},
+    ]
+  },
+  21: {
+    phase:'🎯 Phase 3: Master', phaseName:'MASTER',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'exam',         label:'Exam Simulation #6',                    time:'~30 min'},
+    ]
+  },
+  // Phase 4: PEAK (Days 22-25)
+  22: {
+    phase:'⚡ Phase 4: Peak', phaseName:'PEAK',
+    tasks:[
+      {type:'smart-review', label:'Smart Review only — keep intervals fresh', time:'~15 min'},
+    ]
+  },
+  23: {
+    phase:'⚡ Phase 4: Peak', phaseName:'PEAK',
+    tasks:[
+      {type:'smart-review', label:'Smart Review: All due cards',           time:'~15 min'},
+      {type:'speed', count:10, label:'Speed Round: 10 cards — stay sharp', time:'~5 min'},
+    ]
+  },
+  24: {
+    phase:'⚡ Phase 4: Peak', phaseName:'PEAK',
+    tasks:[
+      {type:'smart-review', label:'Smart Review only — light and confident', time:'~15 min'},
+    ]
+  },
+  25: {
+    phase:'⚡ Phase 4: Peak', phaseName:'PEAK',
+    tasks:[
+      {type:'exam',         label:'Final Exam Simulation #7',              time:'~30 min'},
+      {type:'smart-review', label:'Quick Smart Review — then relax!',      time:'~10 min'},
+    ]
+  },
+};
+
+// Pending coach action: which task just launched which mode
+let coachPendingTask = null;
+
+function renderCoach() {
+  const area = document.getElementById('coachArea');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const examDay = new Date(COACH_EXAM);
+
+  // After exam day
+  if (today > examDay) {
+    area.innerHTML = `<div class="coach-exam-banner">
+      <div style="font-size:3rem;margin-bottom:12px">🎓</div>
+      <h2>Exam Day!</h2>
+      <p style="color:var(--text2);font-size:1.05rem;margin-top:8px">You've put in the work. Trust your preparation.<br>You got this — go show what you know!</p>
+      <div style="margin-top:24px">
+        <button onclick="showSection('exam')" style="background:var(--purple);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer">One last practice exam →</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  const dayNum = getCoachDay();
+  const daysUntil = getDaysUntilExam();
+  const dateKey = getTodayKey();
+  const plan = COACH_PLAN[dayNum];
+  if (!plan) {
+    area.innerHTML = `<div style="padding:40px;text-align:center;color:var(--text2)">Plan not found for day ${dayNum}.</div>`;
+    return;
+  }
+
+  const doneTasks = getTasksDoneForDay(dateKey);
+  const totalTasks = plan.tasks.length;
+  const doneCount = plan.tasks.filter((_,i) => doneTasks[i]).length;
+  const allDone = doneCount === totalTasks;
+  const overallPct = Math.round((dayNum - 1) / 23 * 100);
+
+  // Missed days warning
+  let missedHtml = '';
+  if (dayNum > 1) {
+    const cp = loadCoachProgress();
+    let missedDays = 0;
+    for (let d = 1; d < dayNum; d++) {
+      const dk = new Date(COACH_START.getTime() + (d-1)*86400000).toISOString().slice(0,10);
+      const dayPlan = COACH_PLAN[d];
+      if (!dayPlan) continue;
+      const done = cp[dk] || [];
+      const dayTotal = dayPlan.tasks.length;
+      const dayDone = dayPlan.tasks.filter((_,i) => done[i]).length;
+      if (dayDone < dayTotal) missedDays++;
+    }
+    if (missedDays > 0) {
+      missedHtml = `<div class="coach-caught-up">You're ${missedDays} day${missedDays>1?'s':''} behind — just keep going from today, you've got this!</div>`;
+    }
+  }
+
+  // Build tasks HTML
+  let tasksHtml = '';
+  if (allDone) {
+    tasksHtml = `<div class="coach-done-banner">
+      <span class="coach-confetti">🎉</span>
+      <h3>Today complete!</h3>
+      <p>Come back tomorrow for Day ${Math.min(dayNum+1,23)}.</p>
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button onclick="showSection('smartreview')" style="background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer">Extra Smart Review</button>
+        <button onclick="showSection('dashboard')" style="background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 22px;border-radius:8px;font-size:.88rem;cursor:pointer">View Progress</button>
+      </div>
+    </div>`;
+  } else {
+    tasksHtml = `<div class="coach-tasks">` + plan.tasks.map((task, i) => {
+      const isDone = !!doneTasks[i];
+      // Find first undone task
+      const isNext = !isDone && plan.tasks.slice(0,i).every((_,j) => !!doneTasks[j]);
+      return `<div class="coach-task ${isDone ? 'done' : isNext ? 'active-task' : ''}">
+        <div class="coach-task-icon">${isDone ? '✓' : isNext ? '▶' : (i+1)}</div>
+        <div class="coach-task-body">
+          <div class="coach-task-label">${task.label}</div>
+          <div class="coach-task-meta">${task.time}${task.topicId ? ' · Topic ' + (TOPIC_META[task.topicId]?.num||'') : ''}</div>
+        </div>
+        ${isDone
+          ? `<span class="coach-task-btn done-btn">Done ✓</span>`
+          : `<button class="coach-task-btn" onclick="launchCoachTask(${i})" ${!isNext && i > 0 ? 'style="opacity:.5"':''}>Start</button>`
+        }
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  area.innerHTML = `<div class="coach-view">
+    ${missedHtml}
+    <div class="coach-hero">
+      <div class="coach-hero-top">
+        <div class="coach-day-badge">
+          <div class="coach-day-num">Day ${dayNum}</div>
+          <div class="coach-day-label">of 23</div>
+        </div>
+        <div class="coach-countdown">
+          <div class="cdnum">${daysUntil}</div>
+          <div class="cdlabel">days until exam</div>
+        </div>
+      </div>
+      <div class="coach-phase">${plan.phase}</div>
+      <div class="coach-overall-bar">
+        <div class="coach-overall-fill" style="width:${overallPct}%"></div>
+      </div>
+      <div class="coach-bar-label">
+        <span>Day 1</span>
+        <span>${overallPct}% through the plan</span>
+        <span>Day 23 (Jul 28)</span>
+      </div>
+    </div>
+    ${tasksHtml}
+    <div style="text-align:center;margin-top:8px;font-size:.78rem;color:var(--text2)">${doneCount}/${totalTasks} tasks done today</div>
+  </div>`;
+}
+
+function launchCoachTask(taskIdx) {
+  const dayNum = getCoachDay();
+  const plan = COACH_PLAN[dayNum];
+  if (!plan) return;
+  const task = plan.tasks[taskIdx];
+  if (!task) return;
+
+  coachPendingTask = { dayNum, taskIdx, task };
+
+  if (task.type === 'theory') {
+    // Show theory inline in coach area
+    showCoachTheory(task.topicId, taskIdx);
+    return;
+  }
+
+  if (task.type === 'flashcards') {
+    showSection('flashcards');
+    // Set topic filter to this topic
+    setTimeout(() => {
+      const sel = document.getElementById('fcTopicFilter');
+      if (sel) {
+        // Ensure options populated
+        if (sel.children.length === 1) {
+          TOPICS.forEach(tp => {
+            const opt = document.createElement('option');
+            opt.value = tp.id; opt.textContent = `T${tp.num}: ${tp.name}`;
+            sel.appendChild(opt);
+          });
+        }
+        sel.value = task.topicId;
+        initFlashcards();
+        renderTheory();
+      }
+      // Inject "Mark done & return" button
+      injectCoachReturnBtn('flashcards', taskIdx, 'Finish Flashcards — Mark Done & Return to Plan');
+    }, 50);
+    return;
+  }
+
+  if (task.type === 'speed') {
+    showSection('speedround');
+    setTimeout(() => {
+      // Pre-configure speed round
+      const topicIds = task.topicIds || null;
+      const count = task.count || 10;
+      const weakMode = !!task.topicMode && task.topicMode === 'weak';
+      startCoachSpeedRound(topicIds, count, weakMode, taskIdx);
+    }, 50);
+    return;
+  }
+
+  if (task.type === 'smart-review') {
+    showSection('smartreview');
+    setTimeout(() => {
+      injectCoachReturnBtn('srArea', taskIdx, 'Mark Smart Review Done & Return to Plan', true);
+    }, 100);
+    return;
+  }
+
+  if (task.type === 'exam') {
+    showSection('exam');
+    setTimeout(() => {
+      injectCoachReturnBtn('examSetupArea', taskIdx, 'Mark Exam Done & Return to Plan', true);
+    }, 50);
+    return;
+  }
+}
+
+function showCoachTheory(topicId, taskIdx) {
+  const tp = TOPICS.find(t => t.id === topicId);
+  if (!tp) return;
+  const area = document.getElementById('coachArea');
+  const dayNum = getCoachDay();
+  const daysUntil = getDaysUntilExam();
+  const plan = COACH_PLAN[dayNum];
+
+  area.innerHTML = `
+    <button class="coach-back-btn" onclick="renderCoach()">← Back to Today's Plan</button>
+    <div class="theory-panel">
+      <h4>T${tp.num}: ${tp.name} — Cheat Sheet</h4>
+      <ul>${tp.theory.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button onclick="markCoachTaskDone(${taskIdx})" style="background:var(--green);color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer">
+        I've read it — Mark Done ✓
+      </button>
+    </div>
+  `;
+}
+
+function injectCoachReturnBtn(containerId, taskIdx, label, prepend) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const btn = document.createElement('div');
+  btn.style.cssText = 'text-align:center;margin:16px 0';
+  btn.innerHTML = `<button onclick="markCoachTaskDone(${taskIdx})" style="background:var(--green);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer">
+    ${label} ✓
+  </button>`;
+  if (prepend) container.prepend(btn);
+  else container.appendChild(btn);
+}
+
+function startCoachSpeedRound(topicIds, count, weakMode, taskIdx) {
+  let pool;
+  if (topicIds && topicIds.length > 0) {
+    pool = CARDS
+      .map((c,i) => ({...c, idx:i, srs:getSRSCard(i)}))
+      .filter(c => topicIds.includes(c.t));
+  } else {
+    const due = getDueCards();
+    pool = due.length > 0 ? due : CARDS.map((c,i) => ({...c,idx:i,srs:getSRSCard(i)}));
+  }
+  if (weakMode) {
+    pool.sort((a,b) => {
+      const rank = r => r === 'missed' ? 0 : r === 'partial' ? 1 : r === 'got' ? 2 : 3;
+      return rank(progress[a.idx]) - rank(progress[b.idx]);
+    });
+  } else {
+    pool = pool.sort(() => Math.random() - 0.5);
+  }
+  speedCards = pool.slice(0, Math.min(count === 9999 ? pool.length : count, pool.length));
+  speedIdx = 0; speedStreak = 0; speedMaxStreak = 0; speedResults = []; speedCardTimes = [];
+  renderSpeedCard();
+
+  // After speed card renders, inject "done" button at the results stage
+  // We intercept renderSpeedResults via coachPendingTask
+}
+
+function markCoachTaskDone(taskIdx) {
+  markTaskDone(taskIdx);
+  coachPendingTask = null;
+  showSection('coach');
+}
+
+// Override renderSpeedResults to inject coach return if active
+const _origRenderSpeedResults = renderSpeedResults;
+renderSpeedResults = function() {
+  _origRenderSpeedResults();
+  if (coachPendingTask !== null) {
+    const ti = coachPendingTask.taskIdx;
+    setTimeout(() => injectCoachReturnBtn('speedArea', ti, 'Mark Speed Round Done & Return to Plan', false), 10);
+  }
+};
+
+// Override submitExam to inject coach return if active
+const _origSubmitExam = submitExam;
+submitExam = function() {
+  _origSubmitExam();
+  if (coachPendingTask !== null) {
+    const ti = coachPendingTask.taskIdx;
+    setTimeout(() => {
+      const modal = document.getElementById('resultsModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        const btns = modal.querySelector('.results-btns');
+        if (btns) {
+          const btn = document.createElement('button');
+          btn.className = 'primary';
+          btn.style.background = 'var(--green)';
+          btn.textContent = 'Mark Done & Return to Plan ✓';
+          btn.onclick = () => { modal.classList.add('hidden'); markCoachTaskDone(ti); };
+          btns.prepend(btn);
+        }
+      }
+    }, 50);
+  }
+};
+
+// Convenience alias used by coach task buttons
+function showCoach() { showSection('coach'); }
+
+// Called when a study activity completes; auto-marks the pending coach task done
+function onActivityComplete() {
+  if (coachPendingTask !== null) {
+    markCoachTaskDone(coachPendingTask.taskIdx);
+  }
+}
+
+// ============================================================
 // INIT
 // ============================================================
 loadProgress();
 loadSRS();
-renderDashboard();
+renderCoach();
 </script>
 </body>
 </html>
