@@ -114,14 +114,16 @@ table.data-table td:first-child{text-align:left}
 <div class="container">
 <div class="logo">TUM Cost Accounting<span>Exam Trainer</span></div>
 <nav>
-<button class="active" onclick="showDashboard()">Dashboard</button>
-<button onclick="showExamSetup()">Exam Simulation</button>
+<button class="active" data-nav="coach" onclick="showCoach()">Today's Plan</button>
+<button data-nav="dashboard" onclick="showDashboard()">Dashboard</button>
+<button data-nav="exam" onclick="showExamSetup()">Exam Simulation</button>
 <a href="im4db.html" style="background:var(--card);border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:6px;font-size:.85rem;text-decoration:none;display:inline-block">IM4DB Trainer</a>
 </nav>
 </div>
 </header>
 <div class="container">
-<div id="dashboard" class="dashboard">
+<div id="coachSection" class="section active"></div>
+<div id="dashboard" class="dashboard" style="display:none">
 <div class="stats-grid">
 <div class="stat-card"><div class="num" id="totalAnswered">0</div><div class="label">Questions Answered</div></div>
 <div class="stat-card"><div class="num" id="totalCorrect">0</div><div class="label">Correct Answers</div></div>
@@ -903,11 +905,12 @@ function renderDashboard() {
 
 function showDashboard() {
   state.currentView = 'dashboard';
+  document.getElementById('coachSection').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
   document.getElementById('topicSection').className = 'section';
   document.getElementById('examSection').className = 'section';
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('nav button')[0].classList.add('active');
+  document.querySelector('[data-nav="dashboard"]')?.classList.add('active');
   renderDashboard();
 }
 
@@ -934,7 +937,8 @@ function showTopic(topicId) {
           <option value="hard">Hard</option>
         </select>
         <button class="back-btn" onclick="resetTopic('${topicId}')">Reset Progress</button>
-        <button class="back-btn" onclick="showDashboard()">Back</button>
+        <button class="back-btn" onclick="showCoach()">Back to Today's Plan</button>
+        <button class="back-btn" onclick="showDashboard()">Dashboard</button>
       </div>
     </div>
     <div class="theory-box">${THEORY[topicId] || ''}</div>
@@ -1021,6 +1025,15 @@ function answerQuestion(qId, selected) {
 
   document.getElementById('sol-' + qId).classList.add('visible');
   renderDashboard();
+
+  // Check if all questions in this topic are now answered; if so, mark coach task done
+  if (state.currentTopic) {
+    const topicQs = getTopicQuestions(state.currentTopic);
+    const allAnswered = topicQs.every(q => state.progress[q.id] !== undefined);
+    if (allAnswered) {
+      checkCATaskCompletion();
+    }
+  }
 }
 
 function toggleSolution(qId) {
@@ -1031,11 +1044,12 @@ function toggleSolution(qId) {
 // ===== EXAM MODE =====
 function showExamSetup() {
   state.currentView = 'exam';
+  document.getElementById('coachSection').style.display = 'none';
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('topicSection').className = 'section';
   document.getElementById('examSection').className = 'section active';
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('nav button')[1].classList.add('active');
+  document.querySelector('[data-nav="exam"]')?.classList.add('active');
 
   if (state.examMode) {
     renderExam();
@@ -1151,6 +1165,7 @@ function finishExam() {
   if (!confirm('Submit your exam? You cannot change answers after this.')) return;
   clearInterval(state.examTimer);
   state.examMode = false;
+  checkCATaskCompletion();
 
   let correct = 0;
   const topicBreakdown = {};
@@ -1219,8 +1234,258 @@ function reviewExam() {
   section.innerHTML = html;
 }
 
+// ===== STUDY COACH =====
+const CA_COACH = {
+  startDate: new Date('2026-07-05'),
+  examDate: new Date('2026-07-28'),
+  totalDays: 23,
+  days: {
+    1: {phase:'Learn',emoji:'📚',tasks:[
+      {type:'topic',topicId:'cost-class',label:'Study: Cost Classification (14 questions)',time:'15 min'},
+      {type:'topic',topicId:'cvp',label:'Study: CVP Analysis (20 questions)',time:'25 min'},
+    ]},
+    2: {phase:'Learn',emoji:'📚',tasks:[
+      {type:'topic',topicId:'support-alloc',label:'Study: Support Dept Allocation (14 questions)',time:'25 min'},
+      {type:'topic',topicId:'pnl',label:'Study: Profit & Loss Statements (10 questions)',time:'15 min'},
+    ]},
+    3: {phase:'Learn',emoji:'📚',tasks:[
+      {type:'topic',topicId:'process-cost',label:'Study: Process Costing (11 questions)',time:'20 min'},
+      {type:'topic',topicId:'job-cost',label:'Study: Product/Job Costing (10 questions)',time:'15 min'},
+    ]},
+    4: {phase:'Learn',emoji:'📚',tasks:[
+      {type:'topic',topicId:'material-val',label:'Study: Material Valuation (8 questions)',time:'12 min'},
+      {type:'topic',topicId:'depreciation',label:'Study: Depreciation (6 questions)',time:'10 min'},
+      {type:'topic',topicId:'cost-func',label:'Study: Cost Functions (6 questions)',time:'10 min'},
+    ]},
+    5: {phase:'Learn',emoji:'📚',tasks:[
+      {type:'topic',topicId:'abc',label:'Study: Activity-Based Costing (8 questions)',time:'12 min'},
+      {type:'topic',topicId:'contrib-margin',label:'Study: Contribution Margin (6 questions)',time:'10 min'},
+      {type:'topic',topicId:'make-buy',label:'Study: Make-or-Buy (5 questions)',time:'8 min'},
+      {type:'topic',topicId:'imputed',label:'Study: Imputed Costs (5 questions)',time:'8 min'},
+    ]},
+    6: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'weak',label:'Redo: All wrong answers from Days 1-5',time:'20 min'},
+      {type:'exam',label:'Exam Simulation #1 (40 questions, 60 min)',time:'60 min'},
+    ]},
+    7: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'topic',topicId:'cvp',label:'Drill: CVP Analysis (highest priority)',time:'20 min'},
+      {type:'topic',topicId:'support-alloc',label:'Drill: Support Dept Allocation',time:'20 min'},
+    ]},
+    8: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'topic',topicId:'process-cost',label:'Drill: Process Costing',time:'15 min'},
+      {type:'topic',topicId:'pnl',label:'Drill: Profit & Loss',time:'15 min'},
+      {type:'weak',label:'Review wrong answers',time:'10 min'},
+    ]},
+    9: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'exam',label:'Exam Simulation #2',time:'60 min'},
+      {type:'weak',label:'Review mistakes from exam',time:'15 min'},
+    ]},
+    10: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'topic',topicId:'cvp',label:'Drill: CVP (calculation speed)',time:'15 min'},
+      {type:'topic',topicId:'support-alloc',label:'Drill: Support Allocation (reciprocal method)',time:'15 min'},
+      {type:'topic',topicId:'job-cost',label:'Drill: Job Costing',time:'10 min'},
+    ]},
+    11: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'topic',topicId:'material-val',label:'Drill: Material Valuation',time:'10 min'},
+      {type:'topic',topicId:'abc',label:'Drill: ABC',time:'10 min'},
+      {type:'weak',label:'Review all wrong answers',time:'15 min'},
+    ]},
+    12: {phase:'Drill',emoji:'💪',tasks:[
+      {type:'exam',label:'Exam Simulation #3',time:'60 min'},
+      {type:'weak',label:'Analyze weak topics',time:'15 min'},
+    ]},
+    13: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'weak',label:'Focus: Your weakest topic',time:'20 min'},
+      {type:'exam',label:'Exam Simulation #4',time:'60 min'},
+    ]},
+    14: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'topic',topicId:'cvp',label:'Speed drill: CVP',time:'15 min'},
+      {type:'topic',topicId:'support-alloc',label:'Speed drill: Support Allocation',time:'15 min'},
+    ]},
+    15: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'exam',label:'Exam Simulation #5',time:'60 min'},
+      {type:'weak',label:'Review mistakes',time:'15 min'},
+    ]},
+    16: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'topic',topicId:'process-cost',label:'Speed drill: Process Costing',time:'15 min'},
+      {type:'topic',topicId:'pnl',label:'Speed drill: Income Statements',time:'15 min'},
+    ]},
+    17: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'exam',label:'Exam Simulation #6',time:'60 min'},
+      {type:'weak',label:'Review mistakes',time:'10 min'},
+    ]},
+    18: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'weak',label:'Drill: All remaining weak questions',time:'25 min'},
+      {type:'topic',topicId:'cost-class',label:'Quick review: Theory questions',time:'10 min'},
+    ]},
+    19: {phase:'Master',emoji:'🎯',tasks:[
+      {type:'exam',label:'Exam Simulation #7',time:'60 min'},
+    ]},
+    20: {phase:'Peak',emoji:'⚡',tasks:[
+      {type:'weak',label:'Final review: Wrong answers only',time:'20 min'},
+      {type:'topic',topicId:'cvp',label:'Quick CVP formulas check',time:'10 min'},
+    ]},
+    21: {phase:'Peak',emoji:'⚡',tasks:[
+      {type:'exam',label:'Exam Simulation #8 (Final full sim)',time:'60 min'},
+    ]},
+    22: {phase:'Peak',emoji:'⚡',tasks:[
+      {type:'weak',label:'Light review: Any remaining weak spots',time:'15 min'},
+    ]},
+    23: {phase:'Peak',emoji:'⚡',tasks:[
+      {type:'topic',topicId:'cost-class',label:'Skim theory questions',time:'10 min'},
+      {type:'weak',label:'Glance at key formulas. Relax, you\'re ready!',time:'10 min'},
+    ]},
+  }
+};
+
+function getCACoachDay() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const start = new Date(CA_COACH.startDate); start.setHours(0,0,0,0);
+  return Math.max(1, Math.min(CA_COACH.totalDays, Math.floor((today - start) / 86400000) + 1));
+}
+
+function getCACoachKey() {
+  const d = new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');
+}
+
+function getCACoachProgress() {
+  return JSON.parse(localStorage.getItem('caCoachProgress') || '{}');
+}
+
+function saveCACoachProgress(p) {
+  localStorage.setItem('caCoachProgress', JSON.stringify(p));
+}
+
+function showCoach() {
+  checkCATaskCompletion();
+  state.currentView = 'coach';
+  document.getElementById('coachSection').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('topicSection').className = 'section';
+  document.getElementById('examSection').className = 'section';
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-nav="coach"]')?.classList.add('active');
+  renderCoach();
+}
+
+function renderCoach() {
+  const day = getCACoachDay();
+  const daysLeft = Math.max(0, Math.ceil((CA_COACH.examDate - new Date()) / 86400000));
+  const todayKey = getCACoachKey();
+  const progress = getCACoachProgress();
+  const todayP = progress[todayKey] || [];
+  const dayData = CA_COACH.days[day];
+
+  const completedDays = Object.values(progress).filter(a => a.length > 0 && a.every(Boolean)).length;
+  const el = document.getElementById('coachSection');
+
+  if (daysLeft <= 0) {
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px"><div style="font-size:4rem">🎓</div><h2 style="margin:20px 0">Exam Day!</h2><p style="color:var(--text2);font-size:1.2rem">You\'ve got this. Go ace it!</p></div>';
+    return;
+  }
+
+  if (!dayData) {
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px"><div style="font-size:3rem">✅</div><h2>Plan complete!</h2><p style="color:var(--text2)">Keep doing exam simulations to stay sharp.</p></div>';
+    return;
+  }
+
+  const phase = dayData.phase;
+  const emoji = dayData.emoji;
+  const allDone = dayData.tasks.length > 0 && dayData.tasks.every((_, i) => todayP[i]);
+  const totalTime = dayData.tasks.reduce((s, t) => s + parseInt(t.time), 0);
+
+  const weakTopics = TOPICS.map(t => {
+    const s = getTopicStats(t.id);
+    const acc = s.answered ? s.correct / s.answered : 0;
+    return {id: t.id, name: t.name, accuracy: acc, answered: s.answered};
+  }).filter(t => t.answered > 0).sort((a, b) => a.accuracy - b.accuracy);
+  const weakestName = weakTopics.length > 0 ? weakTopics[0].name + ' (' + Math.round(weakTopics[0].accuracy * 100) + '%)' : 'Review all topics';
+
+  let tasksHtml = dayData.tasks.map((task, i) => {
+    const done = todayP[i];
+    const isNext = !done && dayData.tasks.slice(0, i).every((_, j) => todayP[j]);
+    let label = task.label;
+    if (task.type === 'weak' && weakTopics.length > 0) {
+      label = task.label.replace('Your weakest topic', weakestName);
+    }
+    return `<div style="background:var(--card);border:1px solid ${done ? 'var(--green)' : isNext ? 'var(--accent)' : 'var(--border)'};border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px;transition:.2s">
+      <div style="width:36px;height:36px;border-radius:50%;background:${done ? 'var(--green)' : 'var(--card2)'};display:flex;align-items:center;justify-content:center;font-size:${done ? '1.2rem' : '.9rem'};flex-shrink:0;border:2px solid ${done ? 'var(--green)' : isNext ? 'var(--accent)' : 'var(--border)'};color:${done ? '#fff' : 'var(--text)'}">${done ? '✓' : i + 1}</div>
+      <div style="flex:1">
+        <div style="font-weight:${isNext ? '600' : '400'};color:${done ? 'var(--text2)' : 'var(--text)'};${done ? 'text-decoration:line-through' : ''}">${label}</div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:2px">~${task.time}</div>
+      </div>
+      ${!done ? '<button onclick="startCATask(' + i + ')" style="background:' + (isNext ? 'var(--accent)' : 'var(--card2)') + ';color:' + (isNext ? '#fff' : 'var(--text2)') + ';border:1px solid ' + (isNext ? 'var(--accent)' : 'var(--border)') + ';padding:8px 20px;border-radius:6px;cursor:pointer;font-size:.9rem;font-weight:' + (isNext ? '600' : '400') + '">' + (isNext ? 'Start →' : 'Start') + '</button>' : ''}
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div style="max-width:700px;margin:0 auto;padding:20px 0">
+    <div style="text-align:center;margin-bottom:30px">
+      <div style="font-size:.85rem;color:var(--text2)">DAY ${day} OF ${CA_COACH.totalDays}</div>
+      <div style="font-size:2rem;font-weight:700;margin:4px 0">${emoji} ${phase} Phase</div>
+      <div style="color:var(--accent2);font-size:1.1rem;font-weight:600">${daysLeft} days until exam</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.85rem;color:var(--text2)">
+        <span>Overall Progress</span><span>${completedDays}/${CA_COACH.totalDays} days</span>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${Math.round(completedDays/CA_COACH.totalDays*100)}%;background:var(--accent);border-radius:3px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:.8rem;color:var(--text2)">
+        <span>~${totalTime} min today</span>
+        <span>${todayP.filter(Boolean).length}/${dayData.tasks.length} tasks done</span>
+      </div>
+    </div>
+    ${allDone ? '<div style="text-align:center;background:var(--card);border:2px solid var(--green);border-radius:14px;padding:32px;margin-bottom:24px"><div style="font-size:3rem;margin-bottom:12px">🎉</div><h3 style="color:var(--green);margin-bottom:8px">Today Complete!</h3><p style="color:var(--text2)">Come back tomorrow for Day ' + Math.min(day+1, CA_COACH.totalDays) + '.</p></div>' : ''}
+    <div style="display:flex;flex-direction:column;gap:10px">${tasksHtml}</div>
+    ${weakTopics.length > 0 ? '<div style="margin-top:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px"><div style="font-size:.85rem;color:var(--text2);margin-bottom:8px">Your weakest topics:</div>' + weakTopics.slice(0,3).map(t => '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.9rem"><span style="color:var(--text)">' + t.name + '</span><span style="color:' + (t.accuracy < 0.5 ? 'var(--red)' : t.accuracy < 0.75 ? 'var(--orange)' : 'var(--green)') + '">' + Math.round(t.accuracy*100) + '%</span></div>').join('') + '</div>' : ''}
+  </div>`;
+}
+
+function startCATask(i) {
+  const day = getCACoachDay();
+  const task = CA_COACH.days[day]?.tasks[i];
+  if (!task) return;
+  sessionStorage.setItem('caCoachTask', i.toString());
+
+  switch(task.type) {
+    case 'topic':
+      showTopic(task.topicId);
+      break;
+    case 'exam':
+      showExamSetup();
+      break;
+    case 'weak':
+      const weakTopics = TOPICS.map(t => {
+        const s = getTopicStats(t.id);
+        return {id: t.id, acc: s.answered ? s.correct/s.answered : 1, answered: s.answered};
+      }).filter(t => t.answered > 0).sort((a,b) => a.acc - b.acc);
+      if (weakTopics.length > 0) showTopic(weakTopics[0].id);
+      else showDashboard();
+      break;
+  }
+}
+
+function markCACoachDone(i) {
+  const p = getCACoachProgress();
+  const key = getCACoachKey();
+  if (!p[key]) p[key] = [];
+  p[key][i] = true;
+  saveCACoachProgress(p);
+}
+
+function checkCATaskCompletion() {
+  const taskIdx = sessionStorage.getItem('caCoachTask');
+  if (taskIdx !== null) {
+    markCACoachDone(parseInt(taskIdx));
+    sessionStorage.removeItem('caCoachTask');
+  }
+}
+
 // ===== INIT =====
 renderDashboard();
+showCoach();
 </script>
 </body>
 </html>
